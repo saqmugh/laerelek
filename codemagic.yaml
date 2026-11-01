@@ -1,0 +1,46 @@
+# Bygger Lærelek for iPhone/iPad på Codemagic og laster den opp til TestFlight.
+workflows:
+  laerelek-ios:
+    name: Lærelek iOS
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: Laerelek API-nokkel   # navnet du ga API-nøkkelen i Codemagic
+    environment:
+      groups:
+        - laerelek                             # inneholder CERTIFICATE_PRIVATE_KEY
+      vars:
+        BUNDLE_ID: "com.saqibmughal.laerelek"
+        XCODE_PROJECT: "ios/App/App.xcodeproj"
+        XCODE_SCHEME: "App"
+      xcode: latest
+      node: 22
+    triggering:
+      events: []        # bygg startes manuelt med «Start new build»
+    scripts:
+      - name: Installer pakker
+        script: npm ci
+      - name: Kopier appen inn i iOS-prosjektet
+        script: npx cap sync ios
+      - name: Hent signeringsfiler fra Apple
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+          keychain add-certificates
+          xcode-project use-profiles
+      - name: Sett byggnummer
+        script: |
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $BUILD_NUMBER;/g" "$XCODE_PROJECT/project.pbxproj"
+      - name: Bygg appen
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

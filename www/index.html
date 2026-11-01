@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="color-scheme" content="light dark">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Lærelek</title>
+<style>
+@font-face{font-family:"Andika";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/andika-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Andika";font-weight:700;font-style:normal;font-display:swap;src:url(fonts/andika-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Grandstander";font-weight:600;font-style:normal;font-display:swap;src:url(fonts/grandstander-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Grandstander";font-weight:800;font-style:normal;font-display:swap;src:url(fonts/grandstander-latin-800-normal.woff2) format("woff2")}
+html{-webkit-text-size-adjust:100%}body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}.inp{-webkit-user-select:text;user-select:text}
+/* Layout: one centered play column; profile picker → child home (subject tabs + module tiles) → game card over big answer buttons; parent area behind a gate */
+:root{
+  --bg:#e8f3fb; --surface:#ffffff; --ink:#1b3350; --muted:#5a7190; --line:#cde0ee;
+  --sun:#ffc23a; --leaf:#26a165; --berry:#d4336b; --sea:#2a76d2; --plum:#7a4fd0; --orange:#d97f00; --teal:#0f8590;
+  --ok-bg:#dcf5e8; --bad-bg:#fde3ea; --warn:#b5560b; --warn-bg:#fff0dc;
+  --display:"Grandstander","Comic Sans MS","Trebuchet MS",system-ui,sans-serif;
+  --body:"Andika","Trebuchet MS",system-ui,sans-serif;
+  --shadow:0 3px 0 rgba(27,51,80,.12);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1b2a; --surface:#16293d; --ink:#eef5fb; --muted:#9fb5cb; --line:#26425e;
+  --sun:#ffd25e; --leaf:#2f9d68; --berry:#d84579; --sea:#3b82e0; --plum:#8a62dc; --orange:#c97700; --teal:#13808a;
+  --ok-bg:#163d2c; --bad-bg:#45192a; --warn:#ffb36b; --warn-bg:#3d2a12; --shadow:0 3px 0 rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1b2a; --surface:#16293d; --ink:#eef5fb; --muted:#9fb5cb; --line:#26425e;
+  --sun:#ffd25e; --leaf:#2f9d68; --berry:#d84579; --sea:#3b82e0; --plum:#8a62dc; --orange:#c97700; --teal:#13808a;
+  --ok-bg:#163d2c; --bad-bg:#45192a; --warn:#ffb36b; --warn-bg:#3d2a12; --shadow:0 3px 0 rgba(0,0,0,.35); color-scheme:dark}
+
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 32px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sea);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
+
+/* header */
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:.5px;margin-right:auto;display:flex;align-items:baseline;gap:2px}
+.logo b{color:var(--sea)} .logo i{font-style:normal;color:var(--berry)}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-variant-numeric:tabular-nums}
+.pill .st{color:var(--sun);font-size:20px;line-height:1}
+.pill.btn:hover{border-color:var(--sea)}
+.me{display:flex;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:4px 14px 4px 4px;font-weight:700}
+.me .av{width:38px;height:38px;font-size:24px}
+.av{display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,var(--sun) 35%,var(--surface));line-height:1}
+.label{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+/* profiles */
+.who{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
+.kid{background:var(--surface);border:3px solid var(--line);border-radius:24px;padding:18px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:var(--shadow)}
+.kid:hover{border-color:var(--sea)}
+.kid .av{width:76px;height:76px;font-size:46px}
+.kid b{font-family:var(--display);font-size:22px;max-width:100%;overflow-wrap:anywhere}
+.kid small{color:var(--muted);font-size:15px}
+.kid.add{border-style:dashed;justify-content:center;color:var(--sea)}
+.kid.add .av{background:var(--bg);font-family:var(--display);font-weight:800;color:var(--sea)}
+.link{color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:16px;align-self:center;padding:8px}
+
+/* form */
+.form{background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:20px 18px;display:flex;flex-direction:column;gap:18px}
+.field{display:flex;flex-direction:column;gap:8px}
+.inp{font:inherit;font-size:22px;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:10px 14px;width:100%;box-sizing:border-box}
+.avs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.avs button{aspect-ratio:1;max-width:100%;border-radius:16px;border:3px solid transparent;background:var(--bg);font-size:30px;line-height:1}
+.avs button[aria-pressed="true"]{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--surface))}
+.grades{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.grades button{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 0;font-family:var(--display);font-weight:800;font-size:20px}
+.grades button[aria-pressed="true"]{border-color:var(--sea);background:var(--sea);color:#fff}
+.err{color:var(--berry);font-size:15px;margin:0}
+
+/* home */
+.hello{font-size:28px}
+.goal{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:10px 14px;font-size:16px}
+.goal .gd{display:flex;gap:6px;margin-left:auto}
+.goal .gd span{width:22px;height:22px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:13px;color:#fff}
+.goal .gd span.on{background:var(--leaf)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:4px}
+.tabs button{border-radius:999px;padding:10px;font-family:var(--display);font-weight:800;font-size:20px;color:var(--muted)}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tile{position:relative;border-radius:24px;padding:18px 16px 16px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:160px;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.18);transition:transform .12s}
+.tile:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.tile .big{font-family:var(--display);font-weight:800;font-size:40px;line-height:1}
+.tile h3{font-size:23px}
+.tile p{margin:0;font-size:15px;opacity:.95;line-height:1.3}
+.tile .lv{margin-top:auto;align-self:flex-start;font-size:13px;font-weight:700;background:rgba(255,255,255,.22);border-radius:999px;padding:2px 10px}
+.c-sea{background:var(--sea)} .c-berry{background:var(--berry)} .c-plum{background:var(--plum)}
+.c-leaf{background:var(--leaf)} .c-orange{background:var(--orange)} .c-teal{background:var(--teal)}
+
+/* game */
+.bar{display:flex;align-items:center;gap:12px}
+.back{background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700}
+.dots{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.dots span{width:14px;height:14px;border-radius:50%;background:var(--line)}
+.dots span.done{background:var(--sun)} .dots span.miss{background:var(--muted)} .dots span.now{outline:3px solid var(--sea);outline-offset:1px}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:22px 18px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;box-shadow:var(--shadow);transition:background .2s}
+.card.ok{background:var(--ok-bg)}
+.q{font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.say{width:52px;height:52px;border-radius:50%;background:var(--sea);color:#fff;display:inline-grid;place-items:center;flex:none;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.say svg{width:26px;height:26px}
+.hero{font-size:84px;line-height:1.1}
+.hero.letter{font-family:var(--body);font-weight:700;font-size:110px;line-height:1}
+.hero.wordbig{font-family:var(--body);font-weight:700;font-size:52px;line-height:1.1;overflow-wrap:anywhere}
+.sent{font-size:26px;font-weight:700;line-height:1.5;max-width:30ch}
+.sent .blank{display:inline-block;min-width:70px;border-bottom:4px solid var(--sea);margin:0 4px}
+.items{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:40px;line-height:1.1;max-width:340px}
+.items.five{display:grid;grid-template-columns:repeat(5,1fr);gap:4px 8px;font-size:34px;max-width:300px}
+.expr{font-family:var(--display);font-weight:800;font-size:52px;font-variant-numeric:tabular-nums;letter-spacing:1px;overflow-wrap:anywhere}
+.expr .op{color:var(--berry)}
+.seq{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.seq span{font-family:var(--display);font-weight:800;font-size:30px;min-width:60px;padding:6px 10px;border-radius:14px;background:var(--bg);font-variant-numeric:tabular-nums}
+.seq span.gap{background:none;border:3px dashed var(--sea);color:var(--sea)}
+.story{font-size:21px;max-width:34ch;margin:0}
+.clock{width:200px;max-width:100%;height:auto}
+.pie{width:150px;max-width:100%;height:auto}
+.fr{display:inline-flex;flex-direction:column;align-items:center;line-height:1;vertical-align:middle;font-variant-numeric:tabular-nums}
+.fr i{font-style:normal;padding:0 4px}
+.fr i:first-child{border-bottom:3px solid currentColor;padding-bottom:3px}
+.fr i:last-child{padding-top:3px}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.choices.three{grid-template-columns:repeat(3,1fr)}
+.choices.one{grid-template-columns:1fr}
+.choice{background:var(--surface);border:3px solid var(--line);border-radius:22px;min-height:84px;padding:10px;font-family:var(--display);font-weight:800;font-size:38px;box-shadow:var(--shadow);font-variant-numeric:tabular-nums;transition:transform .1s;min-width:0;overflow-wrap:anywhere}
+.choice.word{font-family:var(--body);font-weight:700;font-size:28px;letter-spacing:.04em}
+.choice.phrase{font-family:var(--body);font-weight:700;font-size:22px;min-height:68px}
+.choice.lower{font-family:var(--body)}
+.choice:active{transform:translateY(2px)}
+.choice.right{border-color:var(--leaf);background:var(--ok-bg)}
+.choice.wrong{border-color:var(--berry);background:var(--bad-bg);opacity:.6}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.pop{animation:pop .5s}
+@keyframes pop{40%{transform:scale(1.06)}}
+.slots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.slots span{width:40px;height:52px;border-bottom:4px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:32px}
+.slots span.filled{border-color:var(--leaf);color:var(--leaf)}
+.slots span.next{border-color:var(--sea)}
+.tiles-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.ltile{width:56px;height:60px;border-radius:16px;background:var(--surface);border:3px solid var(--line);font-weight:700;font-size:30px;box-shadow:var(--shadow)}
+.ltile:disabled{visibility:hidden}
+
+/* alphabet */
+.abc{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:10px}
+.abc button{background:var(--surface);border:2px solid var(--line);border-radius:16px;aspect-ratio:1;max-width:100%;font-weight:700;font-size:32px;box-shadow:var(--shadow)}
+.abc button.sel{border-color:var(--plum);background:color-mix(in srgb,var(--plum) 16%,var(--surface))}
+.abc button.nordic{color:var(--berry)}
+.show{display:flex;align-items:center;gap:18px;justify-content:center;flex-wrap:wrap}
+.show .pair{font-weight:700;font-size:96px;line-height:1}
+.show .pair span{color:var(--muted);font-size:70px}
+.show .word{font-size:26px;font-weight:700}
+
+/* end */
+.end .stars{font-size:46px;letter-spacing:4px;color:var(--sun)}
+.end .stars .off{color:var(--line)}
+.lvup{background:color-mix(in srgb,var(--sun) 30%,var(--surface));border-radius:16px;padding:10px 16px;font-weight:700;margin:0}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.cta{background:var(--sea);color:#fff;border-radius:999px;padding:14px 26px;font-family:var(--display);font-weight:800;font-size:22px;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.cta.alt{background:var(--surface);color:var(--ink);border:2px solid var(--line);box-shadow:var(--shadow)}
+.cta.sm{font-size:17px;padding:10px 18px}
+.cta.danger{background:var(--berry)}
+.note{font-size:14px;color:var(--muted);text-align:center;margin:0}
+.vnote{background:var(--warn-bg);color:var(--ink);border-radius:16px;padding:12px 14px;font-size:15px}
+.vnote summary{cursor:pointer;font-weight:700;color:var(--warn);margin-top:6px}
+.vnote ul{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+
+/* parents */
+.pcard{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:18px 16px;display:flex;flex-direction:column;gap:16px}
+.phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.phead .av{width:56px;height:56px;font-size:34px}
+.phead h2{font-size:26px;overflow-wrap:anywhere}
+.phead .meta{color:var(--muted);font-size:15px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:var(--bg);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column}
+.kpi b{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:92px}
+.week div{display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;font-size:12px;color:var(--muted)}
+.week i{display:block;width:70%;max-width:28px;background:var(--sea);border-radius:6px 6px 2px 2px;min-height:3px}
+.week i.zero{background:var(--line)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 8px;border-bottom:2px solid var(--line)}
+td{padding:8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;vertical-align:middle}
+td.n,th.n{text-align:right}
+.chip{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.chip.good{background:var(--ok-bg);color:var(--leaf)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.new{background:var(--bg);color:var(--muted)}
+.sub{font-size:13px;color:var(--muted)}
+.prow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.confirm{background:var(--bad-bg);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;font-size:16px}
+.info{font-size:15px;color:var(--muted);background:var(--surface);border:2px dashed var(--line);border-radius:18px;padding:14px 16px}
+.info ul{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+@media (max-width:420px){.tile .big{font-size:34px}.tile h3{font-size:20px}.tile{min-height:150px;padding:14px 12px}.choice{font-size:32px}.hero{font-size:68px}.expr{font-size:42px}.avs{grid-template-columns:repeat(4,1fr)}.kpi b{font-size:22px}}
+@media (min-width:900px){body{zoom:1.3}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+(function(){
+// ================= innhold =================
+const LETTERS=[["A","ape","🐒"],["B","bil","🚗"],["C","cowboy","🤠"],["D","due","🕊️"],["E","ekorn","🐿️"],["F","fisk","🐟"],["G","gris","🐷"],["H","hus","🏠"],["I","is","🍦"],["J","jordbær","🍓"],["K","katt","🐱"],["L","løve","🦁"],["M","mus","🐭"],["N","nese","👃"],["O","ost","🧀"],["P","pære","🍐"],["Q","quiz","❓"],["R","rev","🦊"],["S","sol","☀️"],["T","tog","🚂"],["U","ugle","🦉"],["V","vann","💧"],["W","wienerbrød","🥐"],["X","xylofon","🎶"],["Y","yoyo","🪀"],["Z","zoo","🦓"],["Æ","ærfugl","🦆"],["Ø","øre","👂"],["Å","åker","🌾"]];
+const ABC=LETTERS.map(l=>l[0]);
+const COMMON=LETTERS.filter(l=>!"CQWXYZ".includes(l[0]));
+const WORDS_EASY=[["SOL","☀️"],["IS","🍦"],["BIL","🚗"],["HUS","🏠"],["KATT","🐱"],["MUS","🐭"],["OST","🧀"],["TOG","🚂"],["REV","🦊"],["FISK","🐟"],["GRIS","🐷"],["BÅT","⛵"],["BOK","📚"],["EPLE","🍎"],["SKO","👟"],["KU","🐄"],["HUND","🐶"],["HEST","🐴"],["MÅNE","🌙"],["BALL","⚽"],["KAKE","🍰"],["BIE","🐝"],["TRE","🌳"],["LUE","🧢"],["ØRE","👂"],["UGLE","🦉"]];
+const WORDS_HARD=[["SOMMERFUGL","🦋"],["JORDBÆR","🍓"],["ELEFANT","🐘"],["PINGVIN","🐧"],["SKILPADDE","🐢"],["PARAPLY","☂️"],["BLYANT","✏️"],["SNØMANN","⛄"],["TRAKTOR","🚜"],["BANAN","🍌"],["BJØRN","🐻"],["STJERNE","⭐"],["GIRAFF","🦒"],["DINOSAUR","🦕"],["RAKETT","🚀"],["SYKKEL","🚲"],["REGNBUE","🌈"],["APPELSIN","🍊"],["KAMEL","🐫"],["HELIKOPTER","🚁"],["KROKODILLE","🐊"],["MARIHØNE","🐞"],["BLEKKSPRUT","🐙"],["JORDKLODE","🌍"],["JORDBÆRIS","🍨"]];
+const THINGS=["🍎","⭐","🐞","🎈","🐟","🌼","🍓","🚗","🐥","⚽","🍪","🦋"];
+// rettskriving: [riktig, feil]
+const RS={
+ 3:[["katt","kat"],["sykkel","sykel"],["ball","bal"],["gutten","guten"],["mamma","mama"],["pappa","papa"],["sommer","somer"],["hytte","hyte"],["kopp","kop"],["troll","trol"],["snill","snil"],["fjell","fjel"],["stemme","steme"],["tusen","tussen"],["eple","epple"],["hare","harre"],["kjøkken","kjøken"],["hoppet","hopet"],["blomst","blommst"],["vinter","vintter"]],
+ 4:[["kjole","skjole"],["kjeks","skjeks"],["skjorte","sjorte"],["skjerf","sjerf"],["kjøre","sjøre"],["hvor","vor"],["hva","va"],["hvem","vem"],["hjem","jem"],["hjelpe","jelpe"],["gjerne","jerne"],["gjest","jest"],["gjøre","jøre"],["kjenne","sjenne"],["sjokolade","skjokolade"],["stjerne","sjerne"],["kjæreste","skjæreste"],["hvordan","vordan"]],
+ 5:[["kveld","kvel"],["land","lan"],["sild","sil"],["blod","blo"],["sted","ste"],["brød","brø"],["rød","rø"],["også","osså"],["noen","noenn"],["kanskje","kansje"],["egentlig","egenlig"],["Norge","Norje"],["veldig","vellig"],["kald","kal"],["fjord","fjorr"],["morgen","moren"],["fortelle","fortele"],["spennende","spenende"]]
+};
+// setninger: [setning, svar, [valg]]
+const SENT={
+ 6:[["Jeg liker ___ lese bøker.","å",["å","og"]],["Kari ___ Ola går på skolen.","og",["å","og"]],["Det er gøy ___ spille fotball.","å",["å","og"]],["Vi kjøpte brød ___ melk.","og",["å","og"]],["Han prøvde ___ hoppe høyt.","å",["å","og"]],["Mamma ___ pappa er hjemme.","og",["å","og"]],["Hun begynte ___ le.","å",["å","og"]],["Vi spiste ___ drakk.","og",["å","og"]],["Husk ___ pusse tennene!","å",["å","og"]],["Katten ___ hunden er venner.","og",["å","og"]],["Jeg har lyst til ___ bade.","å",["å","og"]],["Hun sang ___ danset hele kvelden.","og",["å","og"]]],
+ 7:[["___ jeg var liten, bodde jeg i Bergen.","Da",["Da","Når"]],["___ det regner, tar jeg på regnjakke.","Når",["Da","Når"]],["I går ___ jeg kom hjem, spiste jeg middag.","da",["da","når"]],["Jeg ringer deg ___ jeg er ferdig.","når",["da","når"]],["___ kommer i morgen.","De",["De","Dem"]],["Jeg så ___ i parken.","dem",["de","dem"]],["Har du sett ___ av vennene mine?","noen",["noe","noen"]],["Vil du ha ___ å drikke?","noe",["noe","noen"]],["Det var ___ som ringte på døra.","noen",["noe","noen"]],["Læreren ga ___ en lekse.","dem",["de","dem"]],["Jeg hørte ___ rart i natt.","noe",["noe","noen"]],["Hver gang ___ jeg ser snø, blir jeg glad.","når",["da","når"]]]
+};
+const WC={substantiv:["hund","bil","skole","eple","lærer","by","bok","vindu","fjell","venn","sko","stol","sol","blomst","sykkel"],verb:["løpe","spise","lese","skrive","synge","hoppe","sove","tegne","svømme","lage","kaste","leke","drikke"],adjektiv:["glad","stor","liten","rød","rask","varm","kald","snill","morsom","høy","myk","gammel","sulten"],pronomen:["jeg","du","han","hun","vi","dere","de","meg","oss"],preposisjon:["på","under","over","ved","bak","foran","mellom","gjennom"]};
+const ANT=[["stor","liten"],["varm","kald"],["glad","trist"],["lys","mørk"],["høy","lav"],["rask","treg"],["tung","lett"],["ny","gammel"],["våt","tørr"],["åpen","lukket"],["opp","ned"],["inn","ut"],["dag","natt"],["først","sist"],["full","tom"],["lang","kort"],["sterk","svak"],["hard","myk"],["ren","skitten"],["tidlig","sen"],["billig","dyr"],["foran","bak"]];
+const SYN=[["glad","blid"],["begynne","starte"],["slutte","stoppe"],["vakker","pen"],["snakke","prate"],["sint","arg"],["redd","engstelig"],["trist","lei seg"],["smart","klok"],["gave","presang"],["morsom","artig"],["rolig","stille"],["spise","ete"],["stor","svær"],["fort","raskt"],["hus","bolig"],["gå","spasere"],["kjapp","rask"]];
+const HOURS=["","ett","to","tre","fire","fem","seks","sju","åtte","ni","ti","elleve","tolv"];
+
+const ROUND=8, GOAL=3;
+const AVATARS=["🦊","🐻","🐼","🐸","🦁","🐯","🐨","🐙","🦄","🐢","🐧","🦉"];
+const MODS={
+ abc:{s:"no",title:"Alfabetet",big:"ABC",c:"c-plum",min:1,max:2,free:true,d:{1:"Trykk på en bokstav og hør den",2:"Trykk på en bokstav og hør den"}},
+ letter:{s:"no",title:"Bokstaver",big:"Aa",c:"c-sea",min:1,max:2,d:{1:"Hør og finn bokstaven",2:"Alfabetet i riktig rekkefølge"}},
+ read:{s:"no",title:"Lese og stave",big:"Ord",c:"c-berry",min:1,max:4,d:{1:"Finn ordet som passer til bildet",2:"Stav korte ord",3:"Stav lengre ord",4:"Stav lange, vanskelige ord"}},
+ spell:{s:"no",title:"Rettskriving",big:"abc✓",c:"c-sea",min:3,max:7,d:{3:"Én eller to konsonanter?",4:"kj, skj, hv, hj og gj",5:"Stumme bokstaver",6:"Og eller å?",7:"da/når, de/dem, noe/noen"}},
+ wcls:{s:"no",title:"Ordklasser",big:"S·V·A",c:"c-plum",min:4,max:7,d:{4:"Substantiv, verb eller adjektiv?",5:"Substantiv, verb eller adjektiv?",6:"Fem ordklasser",7:"Fem ordklasser"}},
+ opp:{s:"no",title:"Motsatt og likt",big:"⇄",c:"c-berry",min:2,max:7,d:{2:"Finn det motsatte ordet",3:"Finn det motsatte ordet",4:"Finn det motsatte ordet",5:"Finn det motsatte ordet",6:"Finn ordet som betyr det samme",7:"Finn ordet som betyr det samme"}},
+ num:{s:"ma",title:"Tall",big:"123",c:"c-leaf",min:1,max:7,d:{1:"Telle til 20 og finne største tall",2:"Tallrekker til 100",3:"Enere, tiere og hundrere",4:"Avrunding",5:"Negative tall",6:"Desimaltall: hvilket er størst?",7:"Negative tall og desimaltall"}},
+ add:{s:"ma",title:"Pluss og minus",big:"+−",c:"c-orange",min:1,max:7,d:{1:"Opp til 10",2:"Opp til 20",3:"Opp til 100 med tierovergang",4:"Opp til 1000",5:"Store tall",6:"Regning med negative tall",7:"Desimaltall"}},
+ mul:{s:"ma",title:"Gange og dele",big:"×÷",c:"c-teal",min:2,max:7,d:{2:"2-, 5- og 10-gangen",3:"Gangetabellen 1–5 og 10",4:"Hele gangetabellen og deling",5:"Gange med tosifrede tall",6:"Store tall og lang divisjon",7:"Gange med 10, 100 og 1000 · regnerekkefølge"}},
+ frac:{s:"ma",title:"Brøk og prosent",big:"½ %",c:"c-leaf",min:3,max:7,d:{3:"Hvor stor del er farget?",4:"Brøker med åttendedeler",5:"Brøkdel av et tall",6:"Brøk, desimaltall og prosent",7:"Prosent i hverdagen"}},
+ clock:{s:"ma",title:"Klokka",big:"kl.",c:"c-orange",min:1,max:4,d:{1:"Hele timer",2:"Hel og halv",3:"Kvart over og kvart på",4:"Fem og fem minutter"}}
+};
+
+// ================= lagring (kun på denne enheten) =================
+const KEY="laerelek_v2";
+let DB=(function(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&v.profiles)return v}catch(e){}return{profiles:[],cur:null,sound:true}})();
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+const S={view:"pick",tab:"no",game:null,abcSel:0,form:null,gate:null,confirmDel:null,lastEnd:null};
+const cur=()=>DB.profiles.find(p=>p.id===DB.cur)||null;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function modState(p,k){const m=MODS[k];if(!p.mods[k])p.mods[k]={lvl:clamp(p.grade,m.min,m.max),up:0,down:0,rounds:0,first:0,total:0,last:null};return p.mods[k]}
+function visibleMods(p,subj){return Object.keys(MODS).filter(k=>MODS[k].s===subj&&p.grade>=MODS[k].min&&p.grade<=MODS[k].max)}
+
+// ================= lyd =================
+// Bare norske stemmer (eller svensk/dansk som nødløsning). Finnes ingen, leser vi ikke opp i stedet for å lese norsk med engelsk stemme.
+let voice=null,voiceKind=null,voiceChecked=false;
+const isNo=v=>/^(nb|no|nn)([-_]|$)/i.test(v.lang)||/norsk|norwegian|bokm[aå]l/i.test(v.name);
+const isNordic=v=>/^(sv|da)([-_]|$)/i.test(v.lang);
+function pickVoice(){try{const vs=speechSynthesis.getVoices()||[];if(!vs.length)return;voiceChecked=true;
+  const no=vs.filter(isNo),nd=vs.filter(isNordic);const best=l=>l.find(v=>/natural|premium|enhanced|online/i.test(v.name))||l.find(v=>v.localService)||l[0];
+  if(no.length){voice=best(no);voiceKind="no"}else if(nd.length){voice=best(nd);voiceKind="nordic"}else{voice=null;voiceKind=null}
+  if(S&&["home","pick","parent"].includes(S.view))render()}catch(e){}}
+try{pickVoice();speechSynthesis.addEventListener?speechSynthesis.addEventListener("voiceschanged",pickVoice):(speechSynthesis.onvoiceschanged=pickVoice);setTimeout(pickVoice,800);setTimeout(()=>{pickVoice();voiceChecked=true;if(["home","pick"].includes(S.view))render()},2500)}catch(e){voiceChecked=true}
+function say(t){if(!DB.sound||!t)return;if(!voice)pickVoice();if(!voice)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/_+/g,"…").replace(/−/g,"minus "));u.voice=voice;u.lang=voice.lang;u.rate=.85;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function voiceNote(){if(!DB.sound||!voiceChecked||voiceKind==="no")return"";
+  const how='<details><summary>Slik legger du til norsk stemme</summary><ul><li><b>iPad/iPhone:</b> Innstillinger › Tilgjengelighet › Opplest innhold › Stemmer › Norsk (Nora)</li><li><b>Android:</b> Innstillinger › Språk › Tekst-til-tale › Google › Installer talefiler › Norsk</li><li><b>Windows:</b> Innstillinger › Tid og språk › Tale › Legg til stemmer › Norsk (bokmål)</li><li><b>Mac:</b> Systeminnstillinger › Tilgjengelighet › Opplest innhold › Systemstemme › Administrer stemmer › Norsk</li><li>Last siden på nytt etterpå.</li></ul></details>';
+  return voiceKind==="nordic"?`<div class="vnote">Fant ingen norsk stemme på denne enheten, så opplesningen bruker ${/^sv/i.test(voice.lang)?"svensk":"dansk"} stemme.${how}</div>`:`<div class="vnote">Fant ingen norsk stemme på denne enheten, så opplesning er slått av. Lydeffektene virker fortsatt.${how}</div>`}
+let ac=null;
+function tone(freqs){if(!DB.sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();let t=ac.currentTime;freqs.forEach(f=>{const o=ac.createOscillator(),g=ac.createGain();o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.18);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+.2);t+=.11})}catch(e){}}
+
+// ================= hjelpere =================
+const rand=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const r3=x=>Math.round(x*1000)/1000;
+const fmt=v=>{v=r3(v);const neg=v<0;let s=Math.abs(v).toString().replace(".",",");if(/^\d{5,}$/.test(s))s=s.replace(/\B(?=(\d{3})+(?!\d))/g," ");return(neg?"−":"")+s};
+function numChoices(ans,n,min,max){const s=new Set([ans]);const spread=Math.max(3,Math.round(Math.abs(ans)*.12));let g=0;while(s.size<n&&g++<300){const c=ans+rand(-spread,spread);if(c>=min&&c<=max)s.add(c)}let c=min;while(s.size<n)s.add(c++);return shuffle([...s]).map(fmt)}
+function decChoices(ans,steps,minV){const out=new Set([fmt(ans)]);for(const st of shuffle(steps.flatMap(s=>[s,-s]))){const v=r3(ans+st);if(v>=minV)out.add(fmt(v));if(out.size>=4)break}return shuffle([...out])}
+function otherFrom(list,ans,n){return shuffle([ans,...shuffle([...new Set(list)].filter(x=>x!==ans)).slice(0,n-1)])}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+const spk='<button class="say" data-act="speak" aria-label="Hør igjen">'+SPK+'</button>';
+const Q=t=>`<div class="q">${spk}${t}</div>`;
+const fr=(n,d)=>`<span class="fr"><i>${n}</i><i>${d}</i></span>`;
+const frLab=v=>{const m=/^(\d+)\/(\d+)$/.exec(v);return m?fr(m[1],m[2]):esc(v)};
+const opWord={"+":"pluss","−":"minus","×":"ganger",":":"delt på"};
+function expr(a,op,b){return{html:Q("Regn ut")+`<div class="expr">${fmt(a)} <span class="op">${op}</span> ${fmt(b)} = ?</div>`,speak:`${fmt(a)} ${opWord[op]} ${fmt(b)}`}}
+
+function clockSVG(h,m){const ha=((h%12)+m/60)*30,ma=m*6;let t="";for(let i=0;i<60;i++){const a=i*6*Math.PI/180,big=i%5===0,r1=big?80:85;t+=`<line x1="${100+r1*Math.sin(a)}" y1="${100-r1*Math.cos(a)}" x2="${100+90*Math.sin(a)}" y2="${100-90*Math.cos(a)}" stroke="var(--ink)" stroke-width="${big?3:1}"/>`}
+ let n="";for(let i=1;i<=12;i++){const a=i*30*Math.PI/180;n+=`<text x="${100+66*Math.sin(a)}" y="${100-66*Math.cos(a)+7}" text-anchor="middle" font-size="20" font-weight="700" fill="var(--ink)" font-family="Andika,sans-serif">${i}</text>`}
+ return`<svg class="clock" viewBox="0 0 200 200" role="img" aria-label="Klokke"><circle cx="100" cy="100" r="95" fill="var(--surface)" stroke="var(--ink)" stroke-width="5"/>${t}${n}<line x1="100" y1="100" x2="${100+45*Math.sin(ha*Math.PI/180)}" y2="${100-45*Math.cos(ha*Math.PI/180)}" stroke="var(--berry)" stroke-width="8" stroke-linecap="round"/><line x1="100" y1="100" x2="${100+74*Math.sin(ma*Math.PI/180)}" y2="${100-74*Math.cos(ma*Math.PI/180)}" stroke="var(--sea)" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="100" r="6" fill="var(--ink)"/></svg>`}
+function pieSVG(n,d){let p="";for(let i=0;i<d;i++){const a0=i*2*Math.PI/d-Math.PI/2,a1=(i+1)*2*Math.PI/d-Math.PI/2;p+=`<path d="M75 75 L${75+68*Math.cos(a0)} ${75+68*Math.sin(a0)} A68 68 0 ${d===1?1:0} 1 ${75+68*Math.cos(a1)} ${75+68*Math.sin(a1)} Z" fill="${i<n?"var(--sun)":"var(--bg)"}" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>`}return`<svg class="pie" viewBox="0 0 150 150" role="img" aria-label="Sirkel delt i ${d} like deler">${p}</svg>`}
+function clockPhrase(h,m){const H=HOURS[h],N=HOURS[h%12+1];return({0:"klokka "+H,5:"fem over "+H,10:"ti over "+H,15:"kvart over "+H,20:"ti på halv "+N,25:"fem på halv "+N,30:"halv "+N,35:"fem over halv "+N,40:"ti over halv "+N,45:"kvart på "+N,50:"ti på "+N,55:"fem på "+N})[m]}
+function spellQ(W){const dec=shuffle("ABDEFGHIKLMNOPRSTUVÆØÅ".split("").filter(c=>!W[0].includes(c))).slice(0,2);return{spell:true,word:W[0],speak:`Stav ordet ${W[0].toLowerCase()}.`,html:Q("Stav ordet")+`<div class="hero">${W[1]}</div>`,tiles:shuffle([...W[0].split(""),...dec]).map(ch=>({ch,used:false})),filled:0}}
+
+// ================= oppgaver per trinn =================
+function qLetter(g){
+  if(g===1){if(Math.random()<.5){const L=pick(COMMON);return{speak:`Finn bokstaven ${L[0]}. ${L[0]} som i ${L[1]}.`,html:Q("Finn bokstaven")+`<div class="hero">${L[2]}</div>`,choices:otherFrom(COMMON.map(x=>x[0]),L[0],3),ans:L[0],cls:"three",sayAns:`${L[0]} som i ${L[1]}!`}}
+    const L=pick(ABC),lc=L.toLowerCase();return{speak:`Finn liten ${lc}.`,html:Q("Finn den lille bokstaven")+`<div class="hero letter">${L}</div>`,choices:otherFrom(ABC.map(x=>x.toLowerCase()),lc,4),ans:lc,ccls:"lower"}}
+  const before=Math.random()<.35;const i=before?rand(1,ABC.length-1):rand(0,ABC.length-2);const ans=before?ABC[i-1]:ABC[i+1];const L=ABC[i];
+  const near=ABC.slice(Math.max(0,i-4),i+5).filter(x=>x!==ans&&x!==L);
+  return{speak:`Hvilken bokstav kommer ${before?"før":"etter"} ${L}?`,html:Q(`Hvilken bokstav kommer <u>${before?"før":"etter"}</u>`)+`<div class="hero letter">${L}</div>`,choices:shuffle([ans,...shuffle(near).slice(0,3)]),ans}
+}
+function qRead(g){
+  if(g===1){const W=pick(WORDS_EASY.filter(w=>w[0].length<=4));return{speak:"Hvilket ord passer til bildet?",html:Q("Hvilket ord passer til bildet?")+`<div class="hero">${W[1]}</div>`,choices:otherFrom(WORDS_EASY.map(x=>x[0]),W[0],3),ans:W[0],ccls:"word",cls:"one",sayAns:W[0].toLowerCase()}}
+  if(g===2)return spellQ(pick(WORDS_EASY));
+  if(g===3)return spellQ(pick(WORDS_HARD.filter(w=>w[0].length<=7)));
+  return spellQ(pick(WORDS_HARD.filter(w=>w[0].length>=7)));
+}
+function qSpell(g){
+  if(g<=5){const P=pick(RS[g]);return{speak:`Hvilket ord er skrevet riktig? ${P[0]}.`,html:Q("Hvilket ord er skrevet riktig?"),choices:shuffle([P[0],P[1]]),ans:P[0],ccls:"word",sayAns:P[0]}}
+  const T=pick(SENT[g]);const [a,b]=T[0].split("___");
+  return{speak:T[0],html:Q("Hvilket ord passer?")+`<p class="sent">${esc(a)}<span class="blank"></span>${esc(b)}</p>`,choices:shuffle(T[2]),ans:T[1],ccls:"word",sayAns:T[0].replace("___",T[1])}
+}
+function qWcls(g){
+  const cats=g<=5?["substantiv","verb","adjektiv"]:["substantiv","verb","adjektiv","pronomen","preposisjon"];
+  const c=pick(cats),w=pick(WC[c]);
+  return{speak:`Hvilken ordklasse er ${w}?`,html:Q("Hvilken ordklasse er ordet?")+`<div class="hero wordbig">${esc(w)}</div>`+(g<=5?'<p class="note">Substantiv = navn på ting · verb = noe du gjør · adjektiv = hvordan noe er</p>':""),choices:cats.slice(),ans:c,ccls:"phrase",cls:g<=5?"three":"one",sayAns:`${w} er ${c==="preposisjon"?"en":"et"} ${c}`}
+}
+function qOpp(g){
+  const syn=g>=6,L=syn?SYN:ANT;const P=pick(L);const flip=Math.random()<.5;const w=flip?P[1]:P[0],ans=flip?P[0]:P[1];
+  const pool=L.flat().filter(x=>x!==w&&x!==ans);
+  return{speak:syn?`Hvilket ord betyr det samme som ${w}?`:`Hva er det motsatte av ${w}?`,html:Q(syn?"Hvilket ord betyr det samme som":"Hva er det motsatte av")+`<div class="hero wordbig">${esc(w)}</div>`,choices:shuffle([ans,...shuffle(pool).slice(0,3)]),ans,ccls:"word",sayAns:ans}
+}
+function qNum(g){
+  if(g===1){if(Math.random()<.55){const it=pick(THINGS),n=rand(4,20);return{speak:"Hvor mange er det?",html:Q("Hvor mange er det?")+`<div class="items five">${Array.from({length:n},()=>`<span>${it}</span>`).join("")}</div><p class="note">Tips: tell fem og fem</p>`,choices:numChoices(n,4,1,25),ans:fmt(n),sayAns:String(n)}}
+    const s=new Set();while(s.size<3)s.add(rand(1,20));const a=[...s],mx=Math.max(...a);return{speak:"Hvilket tall er størst?",html:Q("Hvilket tall er størst?"),choices:a.map(fmt),ans:fmt(mx),cls:"three",sayAns:String(mx)}}
+  if(g===2||(g===3&&Math.random()<.4)){const step=g===2?pick([2,5,10]):pick([25,50,100]);const start=g===2?step*rand(0,5)+(step<10?rand(0,1):0):step*rand(0,6);const seq=[0,1,2,3,4].map(k=>start+k*step);const gap=rand(1,4),ans=seq[gap];
+    return{speak:"Hvilket tall mangler?",html:Q("Hvilket tall mangler?")+`<div class="seq">${seq.map((v,k)=>k===gap?'<span class="gap">?</span>':`<span>${v}</span>`).join("")}</div>`,choices:shuffle([...new Set([ans,ans+step,Math.abs(ans-step),ans+1])]).map(fmt),ans:fmt(ans)}}
+  if(g===3){const n=rand(102,987),pl=pick([["enere",0],["tiere",1],["hundrere",2]]);const ds=String(n).split("").reverse().map(Number);const ans=ds[pl[1]];const ch=new Set([ans,...ds]);while(ch.size<4)ch.add(rand(0,9));
+    return{speak:`Hvor mange ${pl[0]} er det i ${n}?`,html:Q(`Hvor mange <u>${pl[0]}</u> er det i`)+`<div class="expr">${n}</div>`,choices:shuffle([...ch]).slice(0,4).concat([]).map(fmt).filter((v,i,a)=>a.indexOf(v)===i),ans:fmt(ans)}}
+  if(g===4){const to=pick([10,100]);const n=to===10?rand(11,989):rand(110,9890);const ans=Math.round(n/to)*to;const ch=[ans,ans+to,ans-to,Math.floor(n/to)*to===ans?Math.ceil(n/to)*to:Math.floor(n/to)*to];
+    return{speak:`Rund av ${n} til nærmeste ${to===10?"tier":"hundrer"}.`,html:Q(`Rund av til nærmeste ${to===10?"tier":"hundrer"}`)+`<div class="expr">${fmt(n)}</div>`,choices:shuffle([...new Set(ch.map(fmt))]),ans:fmt(ans)}}
+  if(g===5){const step=pick([2,3,5]);const down=Math.random()<.5;const start=down?rand(2,3)*step:-rand(3,4)*step;const seq=[0,1,2,3,4].map(k=>start+(down?-1:1)*k*step);const gap=rand(1,4),ans=seq[gap];
+    return{speak:"Hvilket tall mangler?",html:Q("Hvilket tall mangler?")+`<div class="seq">${seq.map((v,k)=>k===gap?'<span class="gap">?</span>':`<span>${fmt(v)}</span>`).join("")}</div><p class="note">Tallene går under null</p>`,choices:shuffle([...new Set([ans,-ans||step,ans+step,ans-step])]).map(fmt),ans:fmt(ans)}}
+  const big=Math.random()<.5;let vals=new Set();
+  if(g===6){while(vals.size<4)vals.add(pick([rand(1,9)/10,rand(11,99)/100,rand(101,999)/1000,rand(1,9)/100]))}
+  else{while(vals.size<4)vals.add(rand(-24,24)/4)}
+  vals=[...vals];const ans=big?Math.max(...vals):Math.min(...vals);
+  return{speak:`Hvilket tall er ${big?"størst":"minst"}?`,html:Q(`Hvilket tall er <u>${big?"størst":"minst"}</u>?`),choices:shuffle(vals).map(fmt),ans:fmt(ans)}
+}
+function qAdd(g){
+  const plus=Math.random()<.5;let a,b;
+  if(g===7){a=rand(10,200)/10;b=rand(5,95)/100;if(!plus&&b>a)[a,b]=[b,a];const ans=r3(plus?a+b:a-b);return{...expr(a,plus?"+":"−",b),choices:decChoices(ans,[.1,.01,1],0),ans:fmt(ans),sayAns:fmt(ans)}}
+  if(g===6){a=rand(-12,10);b=rand(2,12);const ans=plus?a+b:a-b;return{...expr(a,plus?"+":"−",b),choices:numChoices(ans,4,-30,30),ans:fmt(ans),sayAns:fmt(ans)}}
+  const R={1:[1,10],2:[1,20],3:[11,100],4:[101,1000],5:[1001,10000]}[g];
+  if(plus){if(g===3){a=rand(15,79);b=rand(10-a%10||1,9)+10*rand(0,Math.floor((99-a)/10)-1);if(a+b>100)b=100-a}else{a=rand(R[0],Math.floor(R[1]*.7));b=rand(1,R[1]-a)}}
+  else{a=rand(Math.max(R[0],3),R[1]);b=g===3?rand(Math.min(a%10+1,9),Math.min(a-1,9))+10*rand(0,Math.floor(a/10)-1):rand(1,a-1)}
+  if(b<1)b=1;const ans=plus?a+b:a-b;
+  return{...expr(a,plus?"+":"−",b),choices:numChoices(ans,g===1?3:4,0,R[1]*1.3),ans:fmt(ans),cls:g===1?"three":"",sayAns:fmt(ans)}
+}
+function qMul(g){
+  let a,b,op,ans;const div=Math.random()<(g===2?0:g===3?.3:.45);
+  if(g===7){const r=Math.random();
+    if(r<.35){a=r3(rand(11,999)/10);const f=pick([10,100,1000]);ans=r3(a*f);return{...expr(a,"×",f),choices:shuffle([...new Set([ans,ans*10,ans/10,a*f/100].map(fmt))]),ans:fmt(ans),sayAns:fmt(ans)}}
+    if(r<.6){a=rand(12,980);const f=pick([10,100]);ans=r3(a/f);return{...expr(a,":",f),choices:shuffle([...new Set([ans,ans*10,ans/10,a/(f*100)].map(fmt))]),ans:fmt(ans),sayAns:fmt(ans)}}
+    a=rand(2,12);b=rand(2,9);const c=rand(2,9);ans=a+b*c;return{speak:`${a} pluss ${b} ganger ${c}`,html:Q("Regn ut. Husk: gange før pluss!")+`<div class="expr">${a} <span class="op">+</span> ${b} <span class="op">×</span> ${c} = ?</div>`,choices:shuffle([...new Set([ans,(a+b)*c,ans+c,ans-b])]).map(fmt),ans:fmt(ans),sayAns:String(ans)}}
+  if(g===2){a=pick([2,5,10]);b=rand(1,10);if(Math.random()<.5)[a,b]=[b,a]}
+  else if(g===3){b=pick([2,3,4,5,10]);a=rand(1,10)}
+  else if(g===4){a=rand(2,10);b=rand(2,10)}
+  else if(g===5){if(div){b=rand(2,9);ans=rand(11,30);return{...expr(b*ans,":",b),choices:numChoices(ans,4,1,99),ans:fmt(ans),sayAns:String(ans)}}a=rand(12,49);b=rand(2,9)}
+  else{if(div){b=rand(3,9);ans=rand(20,120);return{...expr(b*ans,":",b),choices:numChoices(ans,4,1,999),ans:fmt(ans),sayAns:String(ans)}}a=rand(11,25);b=rand(11,19)}
+  if(div&&g<=4){const d=g===3?pick([2,5,10]):b;ans=a;return{...expr(a*d,":",d),choices:numChoices(ans,4,1,12),ans:fmt(ans),sayAns:String(ans)}}
+  ans=a*b;return{...expr(a,"×",b),choices:numChoices(ans,4,0,999),ans:fmt(ans),sayAns:String(ans)}
+}
+function qFrac(g){
+  if(g<=4){const d=g===3?pick([2,3,4]):pick([3,4,5,6,8]);const n=g===3&&d===2?1:rand(1,d-1);const ans=n+"/"+d;
+    const c=new Set([ans]);[(d-n)+"/"+d,n+"/"+(d+1),n+"/"+(d-1),(n+1)+"/"+d,d+"/"+n].forEach(x=>{const[p,q]=x.split("/").map(Number);if(c.size<4&&q>1&&p>=1&&p<q)c.add(x)});
+    while(c.size<4)c.add(rand(1,3)+"/"+rand(4,9));
+    return{speak:"Hvor stor del er farget?",html:Q("Hvor stor del er farget?")+pieSVG(n,d),choices:shuffle([...c]),ans,lab:frLab,sayAns:`${n} ${n===1?"av":"av"} ${d}`}}
+  if(g===5){if(Math.random()<.4){const ds=shuffle([2,3,4,5,6,8,10]).slice(0,3);const big=Math.random()<.6;const ansD=big?Math.min(...ds):Math.max(...ds);
+      return{speak:`Hvilken brøk er ${big?"størst":"minst"}?`,html:Q(`Hvilken brøk er <u>${big?"størst":"minst"}</u>?`),choices:ds.map(d=>"1/"+d),ans:"1/"+ansD,lab:frLab,cls:"three"}}
+    const d=pick([2,3,4,5,10]),n=d>2&&Math.random()<.4?rand(2,d-1):1,whole=d*rand(2,10),ans=whole/d*n;
+    return{speak:`Hva er ${n} ${d===2&&n===1?"halvdel":"del"} av ${whole}?`,html:Q("Regn ut")+`<div class="expr">${fr(n,d)} av ${whole} = ?</div>`,choices:numChoices(ans,4,1,100),ans:fmt(ans),sayAns:String(ans)}}
+  if(g===6){const T=[[1,2,.5,50],[1,4,.25,25],[3,4,.75,75],[1,5,.2,20],[2,5,.4,40],[4,5,.8,80],[1,10,.1,10],[3,10,.3,30],[7,10,.7,70],[1,20,.05,5]];const t=pick(T);const mode=rand(0,2);const others=shuffle(T.filter(x=>x!==t)).slice(0,3);
+    if(mode===0){const c=[t[3],...others.map(x=>x[3])].map(v=>v+" %");if(!c.includes(""+t[0]+t[1]+" %")&&+(""+t[0]+t[1])<=100)c[3]=""+t[0]+t[1]+" %";return{speak:"Hvor mange prosent er brøken?",html:Q("Hvor mange prosent er")+`<div class="expr">${fr(t[0],t[1])}</div>`,choices:shuffle([...new Set(c)]),ans:t[3]+" %"}}
+    if(mode===1)return{speak:`Hva er ${fmt(t[2])} som brøk?`,html:Q("Hvilken brøk er det samme som")+`<div class="expr">${fmt(t[2])}</div>`,choices:shuffle([t,...others].map(x=>x[0]+"/"+x[1])),ans:t[0]+"/"+t[1],lab:frLab};
+    return{speak:`Hva er ${t[3]} prosent som desimaltall?`,html:Q("Skriv som desimaltall")+`<div class="expr">${t[3]} %</div>`,choices:shuffle([...new Set([t[2],t[2]*10,t[2]/10,...others.map(x=>x[2])].map(fmt))]).slice(0,4).concat(fmt(t[2])).filter((v,i,a)=>a.indexOf(v)===i).slice(-4),ans:fmt(t[2])}}
+  const p=pick([10,20,25,50,75,5,30]),base={5:20,10:10,20:5,25:4,30:10,50:2,75:4}[p],N=base*rand(2,25);const part=N*p/100;
+  if(Math.random()<.5)return{speak:`Hva er ${p} prosent av ${N}?`,html:Q("Regn ut")+`<div class="expr">${p} % av ${N} = ?</div>`,choices:numChoices(part,4,0,2000),ans:fmt(part),sayAns:fmt(part)};
+  const item=pick([["En genser","🧥"],["En fotball","⚽"],["Et spill","🎮"],["En sykkel","🚲"],["En sekk","🎒"]]);const price=N*10,newp=price-price*p/100;
+  return{speak:`${item[0]} koster ${price} kroner. Den er satt ned ${p} prosent. Hva koster den nå?`,html:Q("Tekstoppgave")+`<div class="hero">${item[1]}</div><p class="story">${item[0]} koster <b>${price} kr</b>. Den er satt ned med <b>${p} %</b>. Hva koster den nå?</p>`,choices:numChoices(newp,4,0,99999).map(v=>v+" kr"),ans:fmt(newp)+" kr",sayAns:fmt(newp)+" kroner"}
+}
+function qClock(g){
+  const mins={1:[0],2:[0,30],3:[0,15,30,45],4:[0,5,10,15,20,25,30,35,40,45,50,55]}[g];
+  const h=rand(1,12),m=pick(g>=2&&Math.random()<.7?mins.filter(x=>x):mins);const ans=clockPhrase(h,m);
+  const c=new Set([ans]);const hp=h%12+1,hm=h===1?12:h-1;
+  [clockPhrase(hm,m),clockPhrase(hp,m),clockPhrase(h,pick(mins)),clockPhrase(hm,pick(mins)),clockPhrase(rand(1,12),pick(mins))].forEach(x=>{if(c.size<(g===1?3:4))c.add(x)});
+  while(c.size<(g===1?3:4))c.add(clockPhrase(rand(1,12),pick(mins)));
+  return{speak:"Hva er klokka?",html:Q("Hva er klokka?")+clockSVG(h,m)+'<p class="note">Den korte viseren viser timen. Den lange viser minuttene.</p>',choices:shuffle([...c]),ans,ccls:"phrase",cls:g===1?"one":"",sayAns:ans}
+}
+const GEN={letter:qLetter,read:qRead,spell:qSpell,wcls:qWcls,opp:qOpp,num:qNum,add:qAdd,mul:qMul,frac:qFrac,clock:qClock};
+
+// ================= spillflyt =================
+function startGame(mod){const p=cur();const st=modState(p,mod);S.game={mod,lvl:st.lvl,i:0,results:[],q:null,tries:0,locked:false};S.view="game";nextQ()}
+function finishRound(){
+  const p=cur(),g=S.game,st=modState(p,g.mod),m=MODS[g.mod];const n=g.results.filter(Boolean).length;
+  st.rounds++;st.first+=n;st.total+=ROUND;st.last=Date.now();
+  let change=null;
+  if(n>=ROUND-1){st.up++;st.down=0;if(st.up>=2&&st.lvl<m.max){st.lvl++;st.up=0;change="up"}}
+  else if(n<=3){st.down++;st.up=0;if(st.down>=2&&st.lvl>m.min){st.lvl--;st.down=0;change="down"}}
+  else{st.up=0;st.down=0}
+  p.hist.unshift({t:Date.now(),m:g.mod,n,l:g.lvl});p.hist=p.hist.slice(0,60);
+  const d=today();p.days[d]=(p.days[d]||0)+1;
+  const keys=Object.keys(p.days).sort();while(keys.length>60)delete p.days[keys.shift()];
+  persist();S.lastEnd={n,change,lvl:st.lvl,streakUp:st.up};
+}
+function nextQ(){const g=S.game;if(g.i>=ROUND){finishRound();S.view="end";render();tone([523,659,784,1047]);const n=S.lastEnd.n;say(S.lastEnd.change==="up"?"Hurra! Du har gått opp et nivå!":n>=ROUND-1?"Fantastisk! Du er kjempeflink!":n>=ROUND/2?"Bra jobba!":"Godt forsøk! Vil du prøve igjen?");return}
+  let q,guard=0;do{q=GEN[g.mod](g.lvl)}while(g.q&&q.ans===g.q.ans&&guard++<6);if(q.choices)q.choices=q.choices.map(String);g.q=q;g.tries=0;g.locked=false;render();setTimeout(()=>say(q.speak),250)}
+function correct(){const g=S.game,p=cur();g.locked=true;const first=g.tries===0;g.results.push(first);if(first){p.stars++;persist()}
+  tone([660,880]);say((g.q.sayAns?g.q.sayAns+". ":"")+pick(["Riktig!","Flott!","Supert!","Så bra!","Ja!"]));
+  const card=document.querySelector(".card");if(card)card.classList.add("ok","pop");
+  setTimeout(()=>{g.i++;nextQ()},1400)}
+function wrong(el){S.game.tries++;tone([220,180]);say("Prøv igjen");if(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}}
+
+// ================= visninger =================
+const logo='<div class="logo"><b>Lære</b><i>lek</i></div>';
+const soundBtn=()=>`<button class="pill btn" data-act="sound" aria-pressed="${DB.sound}">${DB.sound?"Lyd på":"Lyd av"}</button>`;
+function header(){const p=cur();return`<div class="top">${logo}${p?`<span class="pill" title="Stjerner"><span class="st">★</span>${p.stars}</span>`:""}${soundBtn()}</div>`}
+
+function vPick(){
+  const kids=DB.profiles.map(p=>`<button class="kid" data-act="choose" data-id="${p.id}"><span class="av">${p.av}</span><b>${esc(p.name)}</b><small>${p.grade}. trinn · ★ ${p.stars}</small></button>`).join("");
+  return`<div class="top">${logo}${soundBtn()}</div>
+<h1 class="hello">${DB.profiles.length?"Hvem skal lære i dag?":"Velkommen til Lærelek!"}</h1>
+${DB.profiles.length?"":'<p style="margin:0">Lag en spiller for hvert barn. Da husker appen nivået og fremgangen til hver enkelt.</p>'}
+<div class="who">${kids}${DB.profiles.length<6?'<button class="kid add" data-act="new"><span class="av">+</span><b>Ny spiller</b><small>1.–7. trinn</small></button>':""}</div>
+${DB.profiles.length?'<button class="link" data-act="parents">For foreldre</button>':""}`}
+
+function vNew(){const f=S.form;
+  return`<div class="bar"><button class="back" data-act="pickview">← Tilbake</button><h2 style="font-size:22px">Ny spiller</h2></div>
+<form class="form" id="newform" autocomplete="off">
+<div class="field"><label class="label" for="pname">Navn</label><input class="inp" id="pname" maxlength="16" value="${esc(f.name)}" placeholder="F.eks. Sara"></div>
+<div class="field"><span class="label">Velg et dyr</span><div class="avs">${AVATARS.map(a=>`<button type="button" data-act="fav" data-a="${a}" aria-pressed="${f.av===a}" aria-label="Dyr ${a}">${a}</button>`).join("")}</div></div>
+<div class="field"><span class="label">Hvilket trinn går du på?</span><div class="grades">${[1,2,3,4,5,6,7].map(n=>`<button type="button" data-act="fgrade" data-g="${n}" aria-pressed="${f.grade===n}">${n}</button>`).join("")}</div></div>
+${f.err?`<p class="err">${f.err}</p>`:""}
+<button class="cta" type="submit">Start</button></form>`}
+
+function vHome(){const p=cur();const t=p.days[today()]||0;
+  const tabs=`<div class="tabs" role="group" aria-label="Fag"><button data-act="tab" data-t="no" aria-pressed="${S.tab==="no"}">Norsk</button><button data-act="tab" data-t="ma" aria-pressed="${S.tab==="ma"}">Matte</button></div>`;
+  const tiles=visibleMods(p,S.tab).map(k=>{const m=MODS[k];if(m.free)return`<button class="tile ${m.c}" data-act="abc"><span class="big">${m.big}</span><h3>${m.title}</h3><p>${m.d[p.grade]}</p><span class="lv">Utforsk</span></button>`;
+    const st=modState(p,k);return`<button class="tile ${m.c}" data-act="play" data-mod="${k}"><span class="big">${m.big}</span><h3>${m.title}</h3><p>${m.d[st.lvl]}</p><span class="lv">Nivå ${st.lvl}${st.lvl!==p.grade?" ("+(st.lvl>p.grade?"over":"under")+" trinn)":""}</span></button>`}).join("");
+  return`<div class="top"><button class="me" data-act="pickview" aria-label="Bytt spiller"><span class="av">${p.av}</span>${esc(p.name)}</button><span style="margin-right:auto"></span><span class="pill" title="Stjerner"><span class="st">★</span>${p.stars}</span>${soundBtn()}</div>
+<h1 class="hello">Hva vil du øve på i dag?</h1>${voiceNote()}
+<div class="goal"><span>Dagens mål: <b>${GOAL} runder</b>${t>=GOAL?" – klart! 🎉":""}</span><span class="gd" aria-label="${Math.min(t,GOAL)} av ${GOAL} runder">${Array.from({length:GOAL},(_,k)=>`<span class="${k<t?"on":""}">${k<t?"✓":""}</span>`).join("")}</span></div>
+${tabs}<div class="tiles">${tiles}</div>
+<p class="note">${p.grade}. trinn · Nivået går opp etter to runder med 7 eller 8 riktige, og ned etter to runder med 3 eller færre.</p>`}
+
+function vGame(){
+  const g=S.game,q=g.q,m=MODS[g.mod];
+  const dots=Array.from({length:ROUND},(_,k)=>`<span class="${k<g.results.length?(g.results[k]?"done":"miss"):k===g.i?"now":""}"></span>`).join("");
+  let body;
+  if(q.spell){body=`<div class="card">${q.html}<div class="slots">${q.word.split("").map((c,k)=>`<span class="${k<q.filled?"filled":k===q.filled?"next":""}">${k<q.filled?c:""}</span>`).join("")}</div></div>
+<div class="tiles-row">${q.tiles.map((t,k)=>`<button class="ltile" data-act="tile" data-i="${k}" ${t.used?"disabled":""}>${t.ch}</button>`).join("")}</div>`}
+  else{const lab=q.lab||esc;body=`<div class="card">${q.html}</div><div class="choices ${q.cls||""}">${q.choices.map(c=>`<button class="choice ${q.ccls||""}" data-act="answer" data-v="${esc(c)}">${lab(c)}</button>`).join("")}</div>`}
+  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:20px">${m.title}</h2><div class="dots" aria-label="Oppgave ${g.i+1} av ${ROUND}">${dots}</div></div>${body}`
+}
+
+function vEnd(){const g=S.game,e=S.lastEnd,n=e.n;
+  const msg=e.change==="up"?`<p class="lvup">Nytt nivå! Nå øver du på nivå ${e.lvl}.</p>`:e.change==="down"?`<p class="lvup">Vi går et nivå ned og øver litt mer på nivå ${e.lvl}.</p>`:e.streakUp===1?`<p class="note">Én runde til med 7 eller 8 riktige, så går du opp et nivå!</p>`:"";
+  return header()+`<div class="card end"><h1 style="font-size:34px">${n>=ROUND-1?"Fantastisk!":n>=ROUND/2?"Bra jobba!":"Godt forsøk!"}</h1>
+<div class="stars" aria-label="${n} av ${ROUND} stjerner">${"★".repeat(n)}<span class="off">${"★".repeat(ROUND-n)}</span></div>
+<p style="margin:0">Du fikk <b>${n} av ${ROUND}</b> riktige på første forsøk.</p>${msg}
+<div class="row"><button class="cta" data-act="play" data-mod="${g.mod}">Spill igjen</button><button class="cta alt" data-act="home">Hjem</button></div></div>`}
+
+function vAbc(){const sel=LETTERS[S.abcSel];
+  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:22px">Alfabetet</h2></div>
+<div class="card"><div class="show"><div class="pair">${sel[0]}<span>${sel[0].toLowerCase()}</span></div><div class="hero">${sel[2]}</div></div>
+<div class="word">${sel[0]} som i <b>${sel[1]}</b></div>${spk}</div>
+<div class="abc">${LETTERS.map((l,k)=>`<button data-act="letter" data-i="${k}" class="${S.abcSel===k?"sel":""} ${"ÆØÅ".includes(l[0])?"nordic":""}">${l[0]}</button>`).join("")}</div>
+<p class="note">Æ, Ø og Å er de tre norske bokstavene til slutt i alfabetet.</p>`}
+
+function vGate(){const gt=S.gate;
+  return`<div class="bar"><button class="back" data-act="pickview">← Tilbake</button><h2 style="font-size:22px">For foreldre</h2></div>
+<form class="form" id="gateform" autocomplete="off"><p style="margin:0">Denne delen er for voksne. Svar på regnestykket for å gå videre.</p>
+<div class="field"><label class="label" for="gate">Hva er ${gt.a} × ${gt.b}?</label><input class="inp" id="gate" inputmode="numeric" pattern="[0-9]*" maxlength="4"></div>
+${gt.err?`<p class="err">Feil svar. Prøv igjen.</p>`:""}<button class="cta" type="submit">Åpne</button></form>`}
+
+function pct(a,b){return b?Math.round(a/b*100):0}
+function ago(t){if(!t)return"–";const d=Math.floor((Date.now()-t)/864e5);return d<=0?"I dag":d===1?"I går":d+" dager siden"}
+function vParent(){
+  const days=[...Array(7)].map((_,k)=>{const d=new Date();d.setDate(d.getDate()-6+k);return d});
+  const wd=["søn","man","tir","ons","tor","fre","lør"];
+  const key=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  const cards=DB.profiles.map(p=>{
+    const vals=days.map(d=>p.days[key(d)]||0),mx=Math.max(3,...vals),week=vals.reduce((a,b)=>a+b,0);
+    const all=Object.values(p.mods).reduce((a,s)=>({f:a.f+s.first,t:a.t+s.total,r:a.r+s.rounds}),{f:0,t:0,r:0});
+    const rows=["no","ma"].flatMap(sj=>Object.keys(MODS).filter(k=>MODS[k].s===sj&&!MODS[k].free&&(p.mods[k]||(p.grade>=MODS[k].min&&p.grade<=MODS[k].max)))).map(k=>{const s=p.mods[k];const m=MODS[k];
+      if(!s||!s.rounds)return`<tr><td>${m.title}<div class="sub">${m.s==="no"?"Norsk":"Matte"}</div></td><td class="n">${s?s.lvl:clamp(p.grade,m.min,m.max)}</td><td class="n">0</td><td class="n">–</td><td><span class="chip new">Ikke prøvd</span></td></tr>`;
+      const a=pct(s.first,s.total);const chip=s.rounds>=2&&a<60?'<span class="chip warn">Trenger øving</span>':a>=85?'<span class="chip good">Sterk</span>':'<span class="chip new">På vei</span>';
+      return`<tr><td>${m.title}<div class="sub">${m.s==="no"?"Norsk":"Matte"} · ${ago(s.last)}</div></td><td class="n">${s.lvl}</td><td class="n">${s.rounds}</td><td class="n">${a} %</td><td>${chip}</td></tr>`}).join("");
+    const recent=p.hist.slice(0,6).map(h=>`<tr><td>${new Date(h.t).toLocaleDateString("nb-NO",{day:"numeric",month:"short"})}</td><td>${MODS[h.m]?MODS[h.m].title:h.m}</td><td class="n">Nivå ${h.l}</td><td class="n">${h.n}/${ROUND}</td></tr>`).join("");
+    const conf=S.confirmDel===p.id?`<div class="confirm"><span>Slette <b>${esc(p.name)}</b> og all fremgang? Dette kan ikke angres.</span><div class="prow"><button class="cta sm danger" data-act="del" data-id="${p.id}">Slett</button><button class="cta sm alt" data-act="nodel">Avbryt</button></div></div>`:"";
+    return`<section class="pcard"><div class="phead"><span class="av">${p.av}</span><div><h2>${esc(p.name)}</h2><div class="meta">${p.grade}. trinn · ★ ${p.stars} stjerner</div></div></div>
+<div class="kpis"><div class="kpi"><b>${week}</b><span>runder siste 7 dager</span></div><div class="kpi"><b>${all.r}</b><span>runder totalt</span></div><div class="kpi"><b>${all.t?pct(all.f,all.t)+" %":"–"}</b><span>riktig på første forsøk</span></div></div>
+<div><span class="label">Siste 7 dager</span><div class="week">${vals.map((v,k)=>`<div><b style="color:var(--ink);font-size:12px">${v||""}</b><i class="${v?"":"zero"}" style="height:${v?Math.max(8,v/mx*60):3}px"></i>${wd[days[k].getDay()]}</div>`).join("")}</div></div>
+<div><span class="label">Fag og nivå</span><div class="tbl"><table><thead><tr><th>Øvelse</th><th class="n">Nivå</th><th class="n">Runder</th><th class="n">Riktig</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div></div>
+${recent?`<div><span class="label">Siste runder</span><div class="tbl"><table><tbody>${recent}</tbody></table></div></div>`:""}
+<div class="field"><span class="label">Endre trinn</span><div class="grades">${[1,2,3,4,5,6,7].map(n=>`<button data-act="setgrade" data-id="${p.id}" data-g="${n}" aria-pressed="${p.grade===n}">${n}</button>`).join("")}</div><span class="sub">Nytt trinn setter nivået på alle øvelser til det trinnet. Statistikken beholdes.</span></div>
+${conf||`<div class="prow"><button class="cta sm alt" data-act="askdel" data-id="${p.id}">Slett spiller</button></div>`}</section>`}).join("");
+  return`<div class="bar"><button class="back" data-act="pickview">← Spillere</button><h2 style="font-size:22px">Foreldreoversikt</h2></div>
+${cards||'<p>Ingen spillere ennå.</p>'}
+<div class="info"><b style="color:var(--ink)">Slik fungerer Lærelek</b><ul>
+<li>Oppgavene følger kompetansemålene i norsk og matematikk for 1.–7. trinn (LK20).</li>
+<li>Hver øvelse har sitt eget nivå. Barnet går opp etter to runder på rad med 7–8 av 8 riktige, og ned etter to runder på rad med 3 eller færre.</li>
+<li>«Trenger øving» vises når barnet har under 60 % riktig på første forsøk etter minst to runder.</li>
+<li>All fremgang lagres bare på denne enheten. Ingenting sendes til internett, og det trengs ingen konto.</li>
+<li>Opplesning bruker enhetens norske stemme. Finnes den ikke, brukes svensk eller dansk stemme, ellers slås opplesningen av. Appen leser aldri opp med engelsk stemme.</li></ul></div>${voiceNote()}`}
+
+function render(){const app=document.getElementById("app");if(!cur()&&["home","game","end","abc"].includes(S.view))S.view="pick";
+  app.innerHTML={pick:vPick,new:vNew,home:vHome,game:vGame,end:vEnd,abc:vAbc,gate:vGate,parent:vParent}[S.view]()}
+
+// ================= hendelser =================
+const app=document.getElementById("app");
+app.addEventListener("input",e=>{if(e.target.id==="pname"&&S.form)S.form.name=e.target.value});
+app.addEventListener("submit",e=>{e.preventDefault();
+  if(e.target.id==="newform"){const f=S.form;f.name=(document.getElementById("pname").value||"").trim();
+    if(!f.name){f.err="Skriv inn et navn.";render();return}if(!f.grade){f.err="Velg trinn.";render();return}
+    const p={id:"p"+Date.now().toString(36),name:f.name,av:f.av,grade:f.grade,stars:0,mods:{},hist:[],days:{}};DB.profiles.push(p);DB.cur=p.id;persist();S.form=null;S.tab="no";S.view="home";render();say(`Hei, ${p.name}!`)}
+  if(e.target.id==="gateform"){const v=+document.getElementById("gate").value;if(v===S.gate.a*S.gate.b){S.view="parent";S.confirmDel=null;render();window.scrollTo(0,0)}else{S.gate={a:rand(12,19),b:rand(3,9),err:true};render();const i=document.getElementById("gate");if(i)i.focus()}}
+});
+app.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act;
+  if(a==="sound"){DB.sound=!DB.sound;persist();if(!DB.sound)try{speechSynthesis.cancel()}catch(e){}render()}
+  else if(a==="choose"){DB.cur=b.dataset.id;persist();S.view="home";S.tab="no";render();const p=cur();say(`Hei, ${p.name}!`)}
+  else if(a==="new"){S.form={name:"",av:pick(AVATARS),grade:null,err:""};S.view="new";render();const i=document.getElementById("pname");if(i)i.focus()}
+  else if(a==="fav"){S.form.av=b.dataset.a;render()}
+  else if(a==="fgrade"){S.form.grade=+b.dataset.g;S.form.err="";render()}
+  else if(a==="pickview"){try{speechSynthesis.cancel()}catch(e){}S.view="pick";render()}
+  else if(a==="parents"){S.gate={a:rand(12,19),b:rand(3,9),err:false};S.view="gate";render();const i=document.getElementById("gate");if(i)i.focus()}
+  else if(a==="setgrade"){const p=DB.profiles.find(x=>x.id===b.dataset.id);if(p){p.grade=+b.dataset.g;Object.keys(p.mods).forEach(k=>{const m=MODS[k];Object.assign(p.mods[k],{lvl:clamp(p.grade,m.min,m.max),up:0,down:0})});persist();render()}}
+  else if(a==="askdel"){S.confirmDel=b.dataset.id;render()}
+  else if(a==="nodel"){S.confirmDel=null;render()}
+  else if(a==="del"){DB.profiles=DB.profiles.filter(x=>x.id!==b.dataset.id);if(DB.cur===b.dataset.id)DB.cur=null;persist();S.confirmDel=null;render()}
+  else if(a==="tab"){S.tab=b.dataset.t;render()}
+  else if(a==="play"){startGame(b.dataset.mod);window.scrollTo(0,0)}
+  else if(a==="home"){try{speechSynthesis.cancel()}catch(e){}S.view="home";S.game=null;render()}
+  else if(a==="abc"){S.view="abc";S.abcSel=0;render();window.scrollTo(0,0)}
+  else if(a==="letter"){S.abcSel=+b.dataset.i;render();const l=LETTERS[S.abcSel];say(`${l[0]}. ${l[0]} som i ${l[1]}.`)}
+  else if(a==="speak"){if(S.view==="abc"){const l=LETTERS[S.abcSel];say(`${l[0]}. ${l[0]} som i ${l[1]}.`)}else if(S.game)say(S.game.q.speak)}
+  else if(a==="answer"){const g=S.game;if(!g||g.locked||b.classList.contains("wrong"))return;
+    if(b.dataset.v===String(g.q.ans)){b.classList.add("right");correct()}else{b.classList.add("wrong");wrong(b)}}
+  else if(a==="tile"){const g=S.game;if(!g||g.locked)return;const q=g.q,t=q.tiles[+b.dataset.i];
+    if(t.ch===q.word[q.filled]){t.used=true;q.filled++;tone([700]);render();if(q.filled===q.word.length)correct()}
+    else wrong(b)}
+});
+if(cur())S.view="home";
+render();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "appId": "com.saqibmughal.laerelek",
+  "appName": "Lærelek",
+  "webDir": "www",
+  "backgroundColor": "#e8f3fb",
+  "ios": {
+    "contentInset": "never",
+    "scrollEnabled": true,
+    "limitsNavigationsToAppBoundDomains": false
+  }
+}
