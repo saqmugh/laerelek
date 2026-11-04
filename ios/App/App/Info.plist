@@ -24,6 +24,10 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Lærelek bruker bildet du velger som bakgrunn. Bildet lagres bare på denne enheten.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Lærelek kan bruke et bilde du tar som bakgrunn. Bildet lagres bare på denne enheten.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

@@ -65,7 +65,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
 .form{background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:20px 18px;display:flex;flex-direction:column;gap:18px}
 .field{display:flex;flex-direction:column;gap:8px}
 .inp{font:inherit;font-size:22px;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:10px 14px;width:100%;box-sizing:border-box}
-.avs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.avs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
 .avs button{aspect-ratio:1;max-width:100%;border-radius:16px;border:3px solid transparent;background:var(--bg);font-size:30px;line-height:1}
 .avs button[aria-pressed="true"]{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--surface))}
 .grades{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
@@ -93,7 +93,7 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
 .c-leaf{background:var(--leaf)} .c-orange{background:var(--orange)} .c-teal{background:var(--teal)}
 
 /* game */
-.bar{display:flex;align-items:center;gap:12px}
+.bar{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap}
 .back{background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700}
 .dots{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
 .dots span{width:14px;height:14px;border-radius:50%;background:var(--line)}
@@ -111,7 +111,33 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
 .items{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:40px;line-height:1.1;max-width:340px}
 .items.five{display:grid;grid-template-columns:repeat(5,1fr);gap:4px 8px;font-size:34px;max-width:300px}
 .expr{font-family:var(--display);font-weight:800;font-size:52px;font-variant-numeric:tabular-nums;letter-spacing:1px;overflow-wrap:anywhere}
-.expr .op{color:var(--berry)}
+.expr .op{display:inline-block;font-size:1.3em;line-height:.8;vertical-align:-.05em;padding:0 .05em}
+.op.plus,.opword.plus{color:var(--leaf)} .op.minus,.opword.minus{color:var(--berry)} .op.times,.opword.times{color:var(--sea)} .op.div,.opword.div{color:var(--plum)}
+.opword{font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.hintbtn{background:color-mix(in srgb,var(--sun) 35%,var(--surface));border:2px solid var(--sun);border-radius:999px;padding:6px 14px;font-weight:700}
+.hintbtn:disabled{opacity:.45;cursor:default}
+.hintbox{background:color-mix(in srgb,var(--sun) 24%,var(--surface));border-radius:16px;padding:10px 14px;font-size:17px;margin:0;max-width:36ch;text-align:left}
+.hintbox small{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+.choice.removed{visibility:hidden}
+.setup{background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:20px 18px;display:flex;flex-direction:column;gap:18px}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg3 button{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:10px 6px;font-weight:700;display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.seg3 button small{font-weight:400;color:var(--muted);font-size:13px}
+.seg3 button[aria-pressed="true"]{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--surface))}
+.swatches{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.swatches button{aspect-ratio:1;max-width:100%;border-radius:50%;border:4px solid var(--surface);box-shadow:0 0 0 2px var(--line);font-size:12px;font-weight:700;color:var(--ink)}
+.swatches button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+.filebtn{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.filebtn input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.thumb{width:100%;max-width:320px;aspect-ratio:4/3;border-radius:16px;background-size:cover;background-position:center;border:2px solid var(--line)}
+#bgimg{position:fixed;inset:0;z-index:-1;background-size:cover;background-position:center}
+#bgimg::after{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 62%,transparent)}
+body.th-sky{--wash:#4da6ff} body.th-rosa{--wash:#ff6fae} body.th-mint{--wash:#2fcf8a} body.th-lilla{--wash:#9a6cf5} body.th-sol{--wash:#ffb21f} body.th-hav{--wash:#14b3c4}
+body[class*="th-"]{--bg:color-mix(in srgb,var(--wash) 20%,var(--surface))}
+.rank{display:flex;flex-direction:column;gap:8px}
+.rank div{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:14px;padding:8px 12px}
+.rank .av{width:36px;height:36px;font-size:22px}
+.rank b{font-family:var(--display)} .rank span.r{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:15px;text-align:right}
 .seq{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .seq span{font-family:var(--display);font-weight:800;font-size:30px;min-width:60px;padding:6px 10px;border-radius:14px;background:var(--bg);font-variant-numeric:tabular-nums}
 .seq span.gap{background:none;border:3px dashed var(--sea);color:var(--sea)}
@@ -168,13 +194,64 @@ h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
 .vnote summary{cursor:pointer;font-weight:700;color:var(--warn);margin-top:6px}
 .vnote ul{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 
+/* pet */
+.petcard{display:flex;align-items:center;gap:14px;background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:10px 16px;text-align:left;box-shadow:var(--shadow)}
+.petcard:hover{border-color:var(--sea)}
+.petcard .pe{position:relative;font-size:54px;line-height:1;width:64px;text-align:center}
+.petcard b{font-family:var(--display);font-size:22px;display:block}
+.petcard small{color:var(--muted);font-size:15px}
+.petcard .go{margin-left:auto;font-weight:700;color:var(--sea);font-size:15px;white-space:nowrap}
+.petcard.new .pe{animation:wob 2s infinite}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.hatw{position:absolute;left:50%;top:-.42em;transform:translateX(-50%);font-size:.55em}
+.petstage{position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:220px;padding-top:40px}
+.petbig{position:relative;line-height:1;cursor:pointer;transition:transform .2s}
+.petbig.bounce{animation:bnc .6s}
+@keyframes bnc{30%{transform:translateY(-24px) scale(1.08)}60%{transform:translateY(0) scale(.96)}}
+.bubble{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:8px 14px;font-weight:700;position:relative;max-width:30ch}
+.hearts{font-size:24px;letter-spacing:2px}
+.xpbar{width:100%;max-width:320px;height:14px;border-radius:999px;background:var(--line);overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--sun);border-radius:999px}
+.shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.shop button{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:700;box-shadow:var(--shadow)}
+.shop button .ic{font-size:34px;line-height:1.1}
+.shop button small{color:var(--muted);font-weight:700}
+.shop button[aria-pressed="true"]{border-color:var(--leaf);background:var(--ok-bg)}
+.shop button:disabled{opacity:.45;cursor:default}
+.petgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.petgrid button{background:var(--surface);border:3px solid var(--line);border-radius:20px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:700}
+.petgrid button .ic{font-size:48px;line-height:1.1}
+.petgrid button[aria-pressed="true"]{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--surface))}
+.petline{background:color-mix(in srgb,var(--sun) 26%,var(--surface));border-radius:16px;padding:10px 16px;font-weight:700;margin:0}
+/* fun */
+.combo{background:var(--berry);color:#fff;border-radius:999px;padding:4px 12px;font-weight:800;font-family:var(--display);animation:pop .4s}
+.timer{display:flex;align-items:center;gap:10px;margin-left:auto;flex:1;min-width:140px}
+.tbar{flex:1;height:14px;border-radius:999px;background:var(--line);overflow:hidden}
+.tbar i{display:block;height:100%;background:var(--leaf);border-radius:999px;transition:width .25s linear}
+.tbar i.low{background:var(--berry)}
+.tnum{font-family:var(--display);font-weight:800;font-variant-numeric:tabular-nums;min-width:2.2em;text-align:right}
+.lyn{font-size:46px;font-family:var(--display);font-weight:800;color:var(--sea)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+/* gender/age */
+.ages{display:grid;grid-template-columns:repeat(9,1fr);gap:6px}
+.ages button{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 0;font-family:var(--display);font-weight:800;font-size:18px}
+.ages button[aria-pressed="true"]{border-color:var(--sea);background:var(--sea);color:#fff}
+/* subject chooser */
+.subj{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sbig{border-radius:28px;padding:22px 18px 18px;min-height:220px;color:#fff;text-align:left;display:flex;flex-direction:column;gap:8px;box-shadow:0 6px 0 rgba(0,0,0,.18);transition:transform .12s}
+.sbig:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.sbig .big{font-family:var(--display);font-weight:800;font-size:64px;line-height:1}
+.sbig h2{font-size:40px;margin-top:4px}
+.sbig p{margin:0;font-size:16px;opacity:.95}
+.sbig .lv{margin-top:auto;align-self:flex-start;font-size:14px;font-weight:700;background:rgba(255,255,255,.22);border-radius:999px;padding:3px 12px}
+@media (max-width:420px){.sbig{min-height:170px;padding:18px 14px}.sbig h2{font-size:32px}}
 /* parents */
 .pcard{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:18px 16px;display:flex;flex-direction:column;gap:16px}
 .phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .phead .av{width:56px;height:56px;font-size:34px}
 .phead h2{font-size:26px;overflow-wrap:anywhere}
 .phead .meta{color:var(--muted);font-size:15px}
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .kpi{background:var(--bg);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column}
 .kpi b{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
 .kpi span{font-size:13px;color:var(--muted)}
@@ -231,6 +308,17 @@ const SYN=[["glad","blid"],["begynne","starte"],["slutte","stoppe"],["vakker","p
 const HOURS=["","ett","to","tre","fire","fem","seks","sju","åtte","ni","ti","elleve","tolv"];
 
 const ROUND=8, GOAL=3;
+const DIFF={lett:{name:"Lett",d:-1},middels:{name:"Middels",d:0},vanskelig:{name:"Vanskelig",d:1}};
+const PETS={kylling:{n:"Kylling",s:["🐣","🐥","🐓"],def:"Pip"},drage:{n:"Drage",s:["🦎","🐲","🐉"],def:"Drago"},hund:{n:"Hund",s:["🐶","🐕","🦮"],def:"Bjeffi"},fisk:{n:"Fisk",s:["🐟","🐠","🐬"],def:"Bobla"},sommerfugl:{n:"Sommerfugl",s:["🥚","🐛","🦋"],def:"Flagre"}};
+const PET_LV=[0,10,25,45,70,100,140,190,250,320];
+const FOOD=[["eple","🍎","Eple",5,1],["kjeks","🍪","Kjeks",10,2],["kake","🎂","Kake",20,3]];
+const HATS=[["slofe","🎀","Sløyfe",20],["caps","🧢","Caps",30],["flosshatt","🎩","Flosshatt",40],["skolelue","🎓","Skolelue",50],["krone","👑","Krone",60]];
+const LYN_SEK=60;
+const GENDERS=[["gutt","Gutt"],["jente","Jente"],["annet","Annet"]];const GNAME={gutt:"Gutt",jente:"Jente",annet:"Annet"};const AGES=[5,6,7,8,9,10,11,12,13];
+const GTHEME={gutt:"sky",jente:"rosa"};
+const THEMES=[["","Standard","var(--line)"],["sky","Blå","#4da6ff"],["rosa","Rosa","#ff6fae"],["mint","Grønn","#2fcf8a"],["lilla","Lilla","#9a6cf5"],["sol","Gul","#ffb21f"],["hav","Turkis","#14b3c4"]];
+const MODES={add:[["blandet","Blandet"],["plus","Bare pluss"],["minus","Bare minus"]],mul:[["blandet","Blandet"],["gange","Bare gange"],["dele","Bare dele"]]};
+const HINTS={letter:"Si bokstaven høyt. Hvilken lyd lager den?",read:"Si ordet sakte høyt og lytt etter hver lyd.",spell:"Si ordet høyt og lytt nøye etter alle lydene.",wcls:"Substantiv = ting eller navn. Verb = noe du gjør. Adjektiv = hvordan noe er. Pronomen = jeg, du, han, hun, vi. Preposisjon = på, under, bak, ved.",opp:"Tenk på det som er helt motsatt.",num:"Se nøye på hvert siffer. Tell gjerne på fingrene.",frac:"Tell hvor mange deler som er farget, og hvor mange deler det er til sammen.",clock:"Den korte viseren viser timen. Peker den lange viseren på 6, er det halv. På 3 er det kvart over, og på 9 er det kvart på.",add:"Se på tegnet: pluss betyr legge til, minus betyr trekke fra.",mul:"Gange er å legge sammen det samme tallet flere ganger."};
 const AVATARS=["🦊","🐻","🐼","🐸","🦁","🐯","🐨","🐙","🦄","🐢","🐧","🦉"];
 const MODS={
  abc:{s:"no",title:"Alfabetet",big:"ABC",c:"c-plum",min:1,max:2,free:true,d:{1:"Trykk på en bokstav og hør den",2:"Trykk på en bokstav og hør den"}},
@@ -250,11 +338,17 @@ const MODS={
 const KEY="laerelek_v2";
 let DB=(function(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&v.profiles)return v}catch(e){}return{profiles:[],cur:null,sound:true}})();
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
-const S={view:"pick",tab:"no",game:null,abcSel:0,form:null,gate:null,confirmDel:null,lastEnd:null};
+const S={view:"pick",tab:null,game:null,abcSel:0,form:null,gate:null,confirmDel:null,lastEnd:null};
 const cur=()=>DB.profiles.find(p=>p.id===DB.cur)||null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 function modState(p,k){const m=MODS[k];if(!p.mods[k])p.mods[k]={lvl:clamp(p.grade,m.min,m.max),up:0,down:0,rounds:0,first:0,total:0,last:null};return p.mods[k]}
+function bal(p){return Math.max(0,(p.stars||0)-(p.spent||0))}
+function petLv(pet){let l=1;PET_LV.forEach((t,i)=>{if(pet.xp>=t)l=i+1});return l}
+function petEmoji(pet){const l=petLv(pet);return PETS[pet.t].s[l<4?0:l<8?1:2]}
+function petHat(pet){const h=HATS.find(x=>x[0]===pet.hat);return h?h[1]:""}
+function petTick(p){const pet=p.pet;if(!pet)return;const d=today();if(pet.seen!==d){if(pet.seen){const diff=Math.round((new Date(d)-new Date(pet.seen))/864e5);pet.hearts=Math.max(1,(pet.hearts||3)-Math.max(0,diff))}pet.seen=d;persist()}}
+function petMsg(pet){const h=pet.hearts||0;return h<=1?"Jeg savner deg! Kan vi øve sammen?":h<=2?"Jeg er litt sulten…":h<=3?"Hei! Skal vi øve litt?":h<=4?"Jeg er så glad i dag!":"Jeg er kjempeglad! Du er best!"}
 function visibleMods(p,subj){return Object.keys(MODS).filter(k=>MODS[k].s===subj&&p.grade>=MODS[k].min&&p.grade<=MODS[k].max)}
 
 // ================= lyd =================
@@ -290,7 +384,16 @@ const Q=t=>`<div class="q">${spk}${t}</div>`;
 const fr=(n,d)=>`<span class="fr"><i>${n}</i><i>${d}</i></span>`;
 const frLab=v=>{const m=/^(\d+)\/(\d+)$/.exec(v);return m?fr(m[1],m[2]):esc(v)};
 const opWord={"+":"pluss","−":"minus","×":"ganger",":":"delt på"};
-function expr(a,op,b){return{html:Q("Regn ut")+`<div class="expr">${fmt(a)} <span class="op">${op}</span> ${fmt(b)} = ?</div>`,speak:`${fmt(a)} ${opWord[op]} ${fmt(b)}`}}
+const opCls={"+":"plus","−":"minus","×":"times",":":"div"};
+function expr(a,op,b){const c=opCls[op];return{html:Q(`Regn ut · <span class="opword ${c}">${opWord[op]}</span>`)+`<div class="expr">${fmt(a)} <span class="op ${c}">${op}</span> ${fmt(b)} = ?</div>`,speak:`${fmt(a)} ${opWord[op]} ${fmt(b)}`,_a:a,_op:op,_b:b}}
+function autoHint(mod,q,g){if(q.hint)return q.hint;const a=q._a,b=q._b,op=q._op;
+  if(mod==="add"&&op){if(g===6)return"Tenk på en tallinje: pluss går til høyre, minus går til venstre.";if(g===7)return"Sett kommaene rett under hverandre, og regn som vanlig.";
+    if(g<=2)return op==="+"?`Start på ${fmt(Math.max(a,b))} og tell ${fmt(Math.min(a,b))} videre.`:`Start på ${fmt(a)} og tell ${fmt(b)} bakover.`;
+    return op==="+"?"Legg sammen enerne først, så tierne, så hundrerne.":"Trekk fra enerne først, så tierne. Lån fra tierne hvis du må.";}
+  if(mod==="mul"&&op){if(op==="×"&&Number.isInteger(a)&&Number.isInteger(b)&&Math.min(a,b)<=5&&Math.max(a,b)<=12){const n=Math.min(a,b),m=Math.max(a,b);return`${n} × ${m} er det samme som ${Array(n).fill(m).join(" + ")}.`}
+    if(op==="×")return Number.isInteger(a)?`Del opp: ${a} × ${b} = ${Math.floor(a/10)*10} × ${b} + ${a%10} × ${b}.`:"Når du ganger med 10, 100 eller 1000, flytter kommaet seg like mange plasser til høyre som det er nuller.";
+    return Number.isInteger(a/b)?`Hvilket tall ganger ${fmt(b)} blir ${fmt(a)}?`:"Når du deler på 10 eller 100, flytter kommaet seg mot venstre.";}
+  return HINTS[mod]||"Les oppgaven en gang til, sakte."}
 
 function clockSVG(h,m){const ha=((h%12)+m/60)*30,ma=m*6;let t="";for(let i=0;i<60;i++){const a=i*6*Math.PI/180,big=i%5===0,r1=big?80:85;t+=`<line x1="${100+r1*Math.sin(a)}" y1="${100-r1*Math.cos(a)}" x2="${100+90*Math.sin(a)}" y2="${100-90*Math.cos(a)}" stroke="var(--ink)" stroke-width="${big?3:1}"/>`}
  let n="";for(let i=1;i<=12;i++){const a=i*30*Math.PI/180;n+=`<text x="${100+66*Math.sin(a)}" y="${100-66*Math.cos(a)+7}" text-anchor="middle" font-size="20" font-weight="700" fill="var(--ink)" font-family="Andika,sans-serif">${i}</text>`}
@@ -326,7 +429,7 @@ function qWcls(g){
 function qOpp(g){
   const syn=g>=6,L=syn?SYN:ANT;const P=pick(L);const flip=Math.random()<.5;const w=flip?P[1]:P[0],ans=flip?P[0]:P[1];
   const pool=L.flat().filter(x=>x!==w&&x!==ans);
-  return{speak:syn?`Hvilket ord betyr det samme som ${w}?`:`Hva er det motsatte av ${w}?`,html:Q(syn?"Hvilket ord betyr det samme som":"Hva er det motsatte av")+`<div class="hero wordbig">${esc(w)}</div>`,choices:shuffle([ans,...shuffle(pool).slice(0,3)]),ans,ccls:"word",sayAns:ans}
+  return{hint:syn?"Hvilket ord kan du bytte ut uten at meningen endrer seg?":"Tenk på det som er helt motsatt.",speak:syn?`Hvilket ord betyr det samme som ${w}?`:`Hva er det motsatte av ${w}?`,html:Q(syn?"Hvilket ord betyr det samme som":"Hva er det motsatte av")+`<div class="hero wordbig">${esc(w)}</div>`,choices:shuffle([ans,...shuffle(pool).slice(0,3)]),ans,ccls:"word",sayAns:ans}
 }
 function qNum(g){
   if(g===1){if(Math.random()<.55){const it=pick(THINGS),n=rand(4,20);return{speak:"Hvor mange er det?",html:Q("Hvor mange er det?")+`<div class="items five">${Array.from({length:n},()=>`<span>${it}</span>`).join("")}</div><p class="note">Tips: tell fem og fem</p>`,choices:numChoices(n,4,1,25),ans:fmt(n),sayAns:String(n)}}
@@ -345,8 +448,8 @@ function qNum(g){
   vals=[...vals];const ans=big?Math.max(...vals):Math.min(...vals);
   return{speak:`Hvilket tall er ${big?"størst":"minst"}?`,html:Q(`Hvilket tall er <u>${big?"størst":"minst"}</u>?`),choices:shuffle(vals).map(fmt),ans:fmt(ans)}
 }
-function qAdd(g){
-  const plus=Math.random()<.5;let a,b;
+function qAdd(g,mode){
+  const plus=mode==="plus"?true:mode==="minus"?false:Math.random()<.5;let a,b;
   if(g===7){a=rand(10,200)/10;b=rand(5,95)/100;if(!plus&&b>a)[a,b]=[b,a];const ans=r3(plus?a+b:a-b);return{...expr(a,plus?"+":"−",b),choices:decChoices(ans,[.1,.01,1],0),ans:fmt(ans),sayAns:fmt(ans)}}
   if(g===6){a=rand(-12,10);b=rand(2,12);const ans=plus?a+b:a-b;return{...expr(a,plus?"+":"−",b),choices:numChoices(ans,4,-30,30),ans:fmt(ans),sayAns:fmt(ans)}}
   const R={1:[1,10],2:[1,20],3:[11,100],4:[101,1000],5:[1001,10000]}[g];
@@ -355,12 +458,12 @@ function qAdd(g){
   if(b<1)b=1;const ans=plus?a+b:a-b;
   return{...expr(a,plus?"+":"−",b),choices:numChoices(ans,g===1?3:4,0,R[1]*1.3),ans:fmt(ans),cls:g===1?"three":"",sayAns:fmt(ans)}
 }
-function qMul(g){
-  let a,b,op,ans;const div=Math.random()<(g===2?0:g===3?.3:.45);
-  if(g===7){const r=Math.random();
+function qMul(g,mode){
+  let a,b,op,ans;const div=g===2?false:mode==="gange"?false:mode==="dele"?true:Math.random()<(g===3?.3:.45);
+  if(g===7){const r=mode==="gange"?pick([.1,.9]):mode==="dele"?.5:Math.random();
     if(r<.35){a=r3(rand(11,999)/10);const f=pick([10,100,1000]);ans=r3(a*f);return{...expr(a,"×",f),choices:shuffle([...new Set([ans,ans*10,ans/10,a*f/100].map(fmt))]),ans:fmt(ans),sayAns:fmt(ans)}}
     if(r<.6){a=rand(12,980);const f=pick([10,100]);ans=r3(a/f);return{...expr(a,":",f),choices:shuffle([...new Set([ans,ans*10,ans/10,a/(f*100)].map(fmt))]),ans:fmt(ans),sayAns:fmt(ans)}}
-    a=rand(2,12);b=rand(2,9);const c=rand(2,9);ans=a+b*c;return{speak:`${a} pluss ${b} ganger ${c}`,html:Q("Regn ut. Husk: gange før pluss!")+`<div class="expr">${a} <span class="op">+</span> ${b} <span class="op">×</span> ${c} = ?</div>`,choices:shuffle([...new Set([ans,(a+b)*c,ans+c,ans-b])]).map(fmt),ans:fmt(ans),sayAns:String(ans)}}
+    a=rand(2,12);b=rand(2,9);const c=rand(2,9);ans=a+b*c;return{speak:`${a} pluss ${b} ganger ${c}`,html:Q("Regn ut. Husk: gange før pluss!")+`<div class="expr">${a} <span class="op plus">+</span> ${b} <span class="op times">×</span> ${c} = ?</div>`,hint:"Regn gange-stykket først, og legg til etterpå",choices:shuffle([...new Set([ans,(a+b)*c,ans+c,ans-b])]).map(fmt),ans:fmt(ans),sayAns:String(ans)}}
   if(g===2){a=pick([2,5,10]);b=rand(1,10);if(Math.random()<.5)[a,b]=[b,a]}
   else if(g===3){b=pick([2,3,4,5,10]);a=rand(1,10)}
   else if(g===4){a=rand(2,10);b=rand(2,10)}
@@ -398,31 +501,62 @@ function qClock(g){
 const GEN={letter:qLetter,read:qRead,spell:qSpell,wcls:qWcls,opp:qOpp,num:qNum,add:qAdd,mul:qMul,frac:qFrac,clock:qClock};
 
 // ================= spillflyt =================
-function startGame(mod){const p=cur();const st=modState(p,mod);S.game={mod,lvl:st.lvl,i:0,results:[],q:null,tries:0,locked:false};S.view="game";nextQ()}
+function prefs(p,mod){p.prefs=p.prefs||{};return p.prefs[mod]||(p.prefs[mod]={diff:"middels",mode:"blandet"})}
+function hasModes(p,mod){return MODES[mod]&&!(mod==="mul"&&modState(p,mod).lvl<=2)}
+function startGame(mod){const p=cur();const st=modState(p,mod),m=MODS[mod],pr=prefs(p,mod);const lvl=clamp(st.lvl+DIFF[pr.diff].d,m.min,m.max);
+  const lyn=pr.play==="lyn";stopTimer();
+  S.game={mod,lvl,diff:pr.diff,mode:hasModes(p,mod)?pr.mode:"blandet",lyn,endAt:lyn?Date.now()+LYN_SEK*1000:0,i:0,results:[],q:null,tries:0,locked:false,hinted:false,combo:0,bonus:0,t0:Date.now()};S.view="game";
+  if(lyn)S.timer=setInterval(tickTimer,250);nextQ()}
+function stopTimer(){if(S.timer){clearInterval(S.timer);S.timer=null}}
+function tickTimer(){const g=S.game;if(!g||!g.lyn||S.view!=="game"){stopTimer();return}const left=Math.max(0,g.endAt-Date.now());
+  const bar=document.getElementById("tbar"),num=document.getElementById("tnum");if(bar){bar.style.width=(left/(LYN_SEK*10))+"%";bar.classList.toggle("low",left<10000)}if(num)num.textContent=Math.ceil(left/1000);
+  if(left<=0&&!g.locked){stopTimer();endGame()}}
+function endGame(){stopTimer();finishRound();S.view="end";render();tone([523,659,784,1047]);const e=S.lastEnd,n=e.n;
+  if(e.lyn||n>=ROUND-1)confetti(e.lyn?60:120);
+  say(e.lyn?(e.newBest?`Ny rekord! Du klarte ${n}!`:`Tiden er ute! Du klarte ${n}.`):e.petUp?`${cur().pet.name} vokste! Hurra!`:e.change==="up"?"Hurra! Du har gått opp et nivå!":n>=ROUND-1?"Fantastisk! Du er kjempeflink!":n>=ROUND/2?"Bra jobba!":"Godt forsøk! Vil du prøve igjen?")}
+function confetti(n){try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return}catch(e){}
+  let c=document.getElementById("confetti");if(!c){c=document.createElement("canvas");c.id="confetti";document.body.appendChild(c)}
+  const W=c.width=innerWidth,H=c.height=innerHeight,x=c.getContext("2d");const cols=["#ffc23a","#d4336b","#2a76d2","#26a165","#7a4fd0","#e08a00"];
+  const ps=Array.from({length:n},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.35,vx:(Math.random()-.5)*12,vy:-Math.random()*12-4,r:Math.random()*6+4,c:pick(cols),a:Math.random()*6,va:(Math.random()-.5)*.4}));
+  let t=0;(function fr(){t++;x.clearRect(0,0,W,H);ps.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});
+    if(t<110)requestAnimationFrame(fr);else c.remove()})()}
 function finishRound(){
-  const p=cur(),g=S.game,st=modState(p,g.mod),m=MODS[g.mod];const n=g.results.filter(Boolean).length;
-  st.rounds++;st.first+=n;st.total+=ROUND;st.last=Date.now();
-  let change=null;
-  if(n>=ROUND-1){st.up++;st.down=0;if(st.up>=2&&st.lvl<m.max){st.lvl++;st.up=0;change="up"}}
+  const p=cur(),g=S.game,st=modState(p,g.mod),m=MODS[g.mod];const n=g.results.filter(Boolean).length,qn=g.results.length;
+  st.rounds++;st.first+=n;st.total+=g.lyn?qn:ROUND;st.last=Date.now();
+  let change=null,newBest=false;
+  if(g.lyn){p.best=p.best||{};if(n>(p.best[g.mod]||0)){newBest=(p.best[g.mod]||0)>0||n>0;p.best[g.mod]=n}}
+  let petUp=false;if(p.pet){const before=petLv(p.pet);p.pet.xp=(p.pet.xp||0)+n;p.pet.hearts=Math.min(5,(p.pet.hearts||3)+1);petUp=petLv(p.pet)>before}
+  if(g.lyn||g.diff!=="middels"){}
+  else if(n>=ROUND-1){st.up++;st.down=0;if(st.up>=2&&st.lvl<m.max){st.lvl++;st.up=0;change="up"}}
   else if(n<=3){st.down++;st.up=0;if(st.down>=2&&st.lvl>m.min){st.lvl--;st.down=0;change="down"}}
   else{st.up=0;st.down=0}
-  p.hist.unshift({t:Date.now(),m:g.mod,n,l:g.lvl});p.hist=p.hist.slice(0,60);
+  p.hist.unshift({t:Date.now(),m:g.mod,n,q:qn,l:g.lvl,df:g.diff,md:g.mode,ly:g.lyn?1:0});p.hist=p.hist.slice(0,60);
   const d=today();p.days[d]=(p.days[d]||0)+1;
+  const mins=Math.min(30,(Date.now()-g.t0)/60000);p.dmin=p.dmin||{};p.dmin[d]=Math.round(((p.dmin[d]||0)+mins)*10)/10;p.minutes=Math.round(((p.minutes||0)+mins)*10)/10;
+  const mk=Object.keys(p.dmin).sort();while(mk.length>60)delete p.dmin[mk.shift()];
   const keys=Object.keys(p.days).sort();while(keys.length>60)delete p.days[keys.shift()];
-  persist();S.lastEnd={n,change,lvl:st.lvl,streakUp:st.up};
+  persist();S.lastEnd={n,qn,change,lvl:st.lvl,streakUp:!g.lyn&&g.diff==="middels"?st.up:0,diff:g.diff,lyn:g.lyn,newBest,petUp,xp:n,bonus:g.bonus};
 }
-function nextQ(){const g=S.game;if(g.i>=ROUND){finishRound();S.view="end";render();tone([523,659,784,1047]);const n=S.lastEnd.n;say(S.lastEnd.change==="up"?"Hurra! Du har gått opp et nivå!":n>=ROUND-1?"Fantastisk! Du er kjempeflink!":n>=ROUND/2?"Bra jobba!":"Godt forsøk! Vil du prøve igjen?");return}
-  let q,guard=0;do{q=GEN[g.mod](g.lvl)}while(g.q&&q.ans===g.q.ans&&guard++<6);if(q.choices)q.choices=q.choices.map(String);g.q=q;g.tries=0;g.locked=false;render();setTimeout(()=>say(q.speak),250)}
-function correct(){const g=S.game,p=cur();g.locked=true;const first=g.tries===0;g.results.push(first);if(first){p.stars++;persist()}
-  tone([660,880]);say((g.q.sayAns?g.q.sayAns+". ":"")+pick(["Riktig!","Flott!","Supert!","Så bra!","Ja!"]));
+function nextQ(){const g=S.game;if(g.lyn?Date.now()>=g.endAt:g.i>=ROUND){endGame();return}
+  let q,guard=0;do{q=GEN[g.mod](g.lvl,g.mode)}while(g.q&&q.ans===g.q.ans&&guard++<6);if(q.choices)q.choices=q.choices.map(String);q.hint=autoHint(g.mod,q,g.lvl);q.removed=[];g.q=q;g.tries=0;g.hinted=false;g.locked=false;render();setTimeout(()=>say(q.speak),250)}
+function correct(){const g=S.game,p=cur();g.locked=true;const first=g.tries===0;g.results.push(first);if(first){p.stars++;g.combo++}else g.combo=0;
+  let extra="";if(first&&g.combo>0&&g.combo%5===0){p.stars++;g.bonus++;extra=` ${g.combo} på rad! Bonusstjerne!`;confetti(70);tone([660,880,1047,1319])}
+  else if(first&&g.combo===3){extra=" Tre på rad!";confetti(35);tone([660,880,1047])}else{tone([660,880]);if(first)confetti(14)}
+  persist();say((g.lyn?"":(g.q.sayAns?g.q.sayAns+". ":""))+pick(["Riktig!","Flott!","Supert!","Så bra!","Ja!"])+extra);
   const card=document.querySelector(".card");if(card)card.classList.add("ok","pop");
-  setTimeout(()=>{g.i++;nextQ()},1400)}
-function wrong(el){S.game.tries++;tone([220,180]);say("Prøv igjen");if(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}}
+  const cb=document.getElementById("combo");if(cb){cb.textContent=g.combo>=2?`🔥 ${g.combo} på rad`:"";cb.hidden=g.combo<2}
+  const sc=document.querySelector(".top .pill .st+span, #balnum");if(sc)sc.textContent=bal(p);
+  setTimeout(()=>{if(S.game!==g)return;g.i++;nextQ()},g.lyn?650:1400)}
+function useHint(){const g=S.game;if(!g||g.locked||g.hinted)return;const q=g.q;g.hinted=true;g.tries++;g.combo=0;
+  if(q.spell){const i=q.tiles.findIndex(t=>!t.used&&t.ch===q.word[q.filled]);if(i>=0){q.tiles[i].used=true;q.filled++}}
+  else{const left=q.choices.filter(c=>c!==String(q.ans)&&!q.removed.includes(c)&&!(q.wrongs||[]).includes(c));if(left.length>1||(left.length===1&&q.choices.length>2))q.removed.push(pick(left))}
+  render();say(q.hint);if(q.spell&&q.filled===q.word.length)correct()}
+function wrong(el){S.game.tries++;S.game.combo=0;const cb=document.getElementById("combo");if(cb)cb.hidden=true;if(el&&el.dataset.v){const q=S.game.q;q.wrongs=q.wrongs||[];q.wrongs.push(el.dataset.v)}tone([220,180]);say("Prøv igjen");if(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}}
 
 // ================= visninger =================
 const logo='<div class="logo"><b>Lære</b><i>lek</i></div>';
 const soundBtn=()=>`<button class="pill btn" data-act="sound" aria-pressed="${DB.sound}">${DB.sound?"Lyd på":"Lyd av"}</button>`;
-function header(){const p=cur();return`<div class="top">${logo}${p?`<span class="pill" title="Stjerner"><span class="st">★</span>${p.stars}</span>`:""}${soundBtn()}</div>`}
+function header(){const p=cur();return`<div class="top">${logo}${p?`<span class="pill" title="Stjerner du kan bruke"><span class="st">★</span><span id="balnum">${bal(p)}</span></span>`:""}${soundBtn()}</div>`}
 
 function vPick(){
   const kids=DB.profiles.map(p=>`<button class="kid" data-act="choose" data-id="${p.id}"><span class="av">${p.av}</span><b>${esc(p.name)}</b><small>${p.grade}. trinn · ★ ${p.stars}</small></button>`).join("");
@@ -437,18 +571,23 @@ function vNew(){const f=S.form;
 <form class="form" id="newform" autocomplete="off">
 <div class="field"><label class="label" for="pname">Navn</label><input class="inp" id="pname" maxlength="16" value="${esc(f.name)}" placeholder="F.eks. Sara"></div>
 <div class="field"><span class="label">Velg et dyr</span><div class="avs">${AVATARS.map(a=>`<button type="button" data-act="fav" data-a="${a}" aria-pressed="${f.av===a}" aria-label="Dyr ${a}">${a}</button>`).join("")}</div></div>
+<div class="field"><span class="label">Kjønn</span><div class="seg3">${GENDERS.map(([v,n])=>`<button type="button" data-act="fgender" data-v="${v}" aria-pressed="${f.gender===v}">${n}</button>`).join("")}</div></div>
+<div class="field"><span class="label">Hvor gammel er du?</span><div class="ages">${AGES.map(n=>`<button type="button" data-act="fage" data-v="${n}" aria-pressed="${f.age===n}">${n}</button>`).join("")}</div></div>
 <div class="field"><span class="label">Hvilket trinn går du på?</span><div class="grades">${[1,2,3,4,5,6,7].map(n=>`<button type="button" data-act="fgrade" data-g="${n}" aria-pressed="${f.grade===n}">${n}</button>`).join("")}</div></div>
 ${f.err?`<p class="err">${f.err}</p>`:""}
 <button class="cta" type="submit">Start</button></form>`}
 
-function vHome(){const p=cur();const t=p.days[today()]||0;
-  const tabs=`<div class="tabs" role="group" aria-label="Fag"><button data-act="tab" data-t="no" aria-pressed="${S.tab==="no"}">Norsk</button><button data-act="tab" data-t="ma" aria-pressed="${S.tab==="ma"}">Matte</button></div>`;
-  const tiles=visibleMods(p,S.tab).map(k=>{const m=MODS[k];if(m.free)return`<button class="tile ${m.c}" data-act="abc"><span class="big">${m.big}</span><h3>${m.title}</h3><p>${m.d[p.grade]}</p><span class="lv">Utforsk</span></button>`;
-    const st=modState(p,k);return`<button class="tile ${m.c}" data-act="play" data-mod="${k}"><span class="big">${m.big}</span><h3>${m.title}</h3><p>${m.d[st.lvl]}</p><span class="lv">Nivå ${st.lvl}${st.lvl!==p.grade?" ("+(st.lvl>p.grade?"over":"under")+" trinn)":""}</span></button>`}).join("");
-  return`<div class="top"><button class="me" data-act="pickview" aria-label="Bytt spiller"><span class="av">${p.av}</span>${esc(p.name)}</button><span style="margin-right:auto"></span><span class="pill" title="Stjerner"><span class="st">★</span>${p.stars}</span>${soundBtn()}</div>
-<h1 class="hello">Hva vil du øve på i dag?</h1>${voiceNote()}
+function vHome(){const p=cur();petTick(p);const t=p.days[today()]||0;
+  const nNo=visibleMods(p,"no").length,nMa=visibleMods(p,"ma").length;
+  const subjects=`<div class="subj"><button class="sbig c-berry" data-act="tab" data-t="no"><h2>Norsk</h2><p>Bokstaver, lesing og skriving</p><span class="lv">${nNo} øvelser</span></button><button class="sbig c-leaf" data-act="tab" data-t="ma"><h2>Matte</h2><p>Tall, regning og klokka</p><span class="lv">${nMa} øvelser</span></button></div>`;
+  const tabs=`<div class="bar"><button class="back" data-act="subjects">← Fag</button><h2 style="font-size:26px">${S.tab==="no"?"Norsk":"Matte"}</h2></div>`;
+  const tiles=!S.tab?"":visibleMods(p,S.tab).map(k=>{const m=MODS[k];if(m.free)return`<button class="tile ${m.c}" data-act="abc"><span class="big">${m.big}</span><h3>${m.title}</h3><p>${m.d[p.grade]}</p><span class="lv">Utforsk</span></button>`;
+    const st=modState(p,k);return`<button class="tile ${m.c}" data-act="setup" data-mod="${k}"><span class="big">${m.big}</span><h3>${m.title}</h3><p>${m.d[st.lvl]}</p><span class="lv">Nivå ${st.lvl}${st.lvl!==p.grade?" ("+(st.lvl>p.grade?"over":"under")+" trinn)":""}</span></button>`}).join("");
+  return`<div class="top"><button class="me" data-act="pickview" aria-label="Bytt spiller"><span class="av">${p.av}</span>${esc(p.name)}</button><span style="margin-right:auto"></span><span class="pill" title="Stjerner du kan bruke"><span class="st">★</span><span id="balnum">${bal(p)}</span></span><button class="pill btn" data-act="theme">🎨 Ikon og tema</button>${soundBtn()}</div>
+<h1 class="hello">${S.tab?"Velg en øvelse":"Hva vil du øve på i dag?"}</h1>${voiceNote()}
+${S.tab?"":p.pet?`<button class="petcard" data-act="pet"><span class="pe">${petEmoji(p.pet)}${petHat(p.pet)?`<span class="hatw">${petHat(p.pet)}</span>`:""}</span><div><b>${esc(p.pet.name)}</b><small>Nivå ${petLv(p.pet)} · ${"❤️".repeat(p.pet.hearts||0)}${"🤍".repeat(5-(p.pet.hearts||0))}</small></div><span class="go">Mat og kos →</span></button>`:`<button class="petcard new" data-act="petnew"><span class="pe">🥚</span><div><b>Få ditt eget kjæledyr!</b><small>Det vokser når du øver.</small></div><span class="go">Velg →</span></button>`}
 <div class="goal"><span>Dagens mål: <b>${GOAL} runder</b>${t>=GOAL?" – klart! 🎉":""}</span><span class="gd" aria-label="${Math.min(t,GOAL)} av ${GOAL} runder">${Array.from({length:GOAL},(_,k)=>`<span class="${k<t?"on":""}">${k<t?"✓":""}</span>`).join("")}</span></div>
-${tabs}<div class="tiles">${tiles}</div>
+${S.tab?tabs+`<div class="tiles">${tiles}</div>`:subjects}
 <p class="note">${p.grade}. trinn · Nivået går opp etter to runder med 7 eller 8 riktige, og ned etter to runder med 3 eller færre.</p>`}
 
 function vGame(){
@@ -457,15 +596,53 @@ function vGame(){
   let body;
   if(q.spell){body=`<div class="card">${q.html}<div class="slots">${q.word.split("").map((c,k)=>`<span class="${k<q.filled?"filled":k===q.filled?"next":""}">${k<q.filled?c:""}</span>`).join("")}</div></div>
 <div class="tiles-row">${q.tiles.map((t,k)=>`<button class="ltile" data-act="tile" data-i="${k}" ${t.used?"disabled":""}>${t.ch}</button>`).join("")}</div>`}
-  else{const lab=q.lab||esc;body=`<div class="card">${q.html}</div><div class="choices ${q.cls||""}">${q.choices.map(c=>`<button class="choice ${q.ccls||""}" data-act="answer" data-v="${esc(c)}">${lab(c)}</button>`).join("")}</div>`}
-  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:20px">${m.title}</h2><div class="dots" aria-label="Oppgave ${g.i+1} av ${ROUND}">${dots}</div></div>${body}`
+  else{const lab=q.lab||esc;body=`<div class="card">${q.html}${hintBox(g)}</div><div class="choices ${q.cls||""}">${q.choices.map(c=>`<button class="choice ${q.ccls||""}${q.removed.includes(c)?" removed":""}${(q.wrongs||[]).includes(c)?" wrong":""}" data-act="answer" data-v="${esc(c)}">${lab(c)}</button>`).join("")}</div>`}
+  if(q.spell)body=body.replace('</div></div>\n<div class="tiles-row">',`</div>${hintBox(g)}</div>\n<div class="tiles-row">`);
+  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:20px">${m.title}</h2><button class="hintbtn" data-act="hint" ${g.hinted||g.locked?"disabled":""}>💡 Tips</button><span class="combo" id="combo" ${g.combo>=2?"":"hidden"}>🔥 ${g.combo} på rad</span>${g.lyn?(()=>{const left=Math.max(0,g.endAt-Date.now());return`<div class="timer" aria-label="Tid igjen"><span>⚡ ${g.results.filter(Boolean).length}</span><div class="tbar"><i id="tbar" class="${left<10000?"low":""}" style="width:${left/(LYN_SEK*10)}%"></i></div><span class="tnum" id="tnum">${Math.ceil(left/1000)}</span></div>`})():`<div class="dots" aria-label="Oppgave ${g.i+1} av ${ROUND}">${dots}</div>`}</div>${body}`
 }
 
-function vEnd(){const g=S.game,e=S.lastEnd,n=e.n;
+function hintBox(g){return g.hinted?`<p class="hintbox">💡 ${esc(g.q.hint)}<small>${g.q.spell?"Neste bokstav er satt inn for deg.":"Ett galt svar er fjernet."} Du får ikke stjerne på denne oppgaven.</small></p>`:""}
+function vSetup(){const p=cur(),k=S.setupMod,m=MODS[k],st=modState(p,k),pr=prefs(p,k);
+  const lv=d=>clamp(st.lvl+DIFF[d].d,m.min,m.max);
+  const modes=hasModes(p,k)?`<div class="field"><span class="label">Hva vil du øve på?</span><div class="seg3">${MODES[k].map(([v,n])=>`<button data-act="pmode" data-v="${v}" aria-pressed="${pr.mode===v}">${n}</button>`).join("")}</div></div>`:"";
+  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:22px">${m.title}</h2></div>
+<div class="setup"><div class="field"><span class="label">Hvor vanskelig?</span><div class="seg3">${Object.entries(DIFF).map(([v,o])=>`<button data-act="pdiff" data-v="${v}" aria-pressed="${pr.diff===v}">${o.name}<small>Nivå ${lv(v)}</small></button>`).join("")}</div>
+<span class="sub">${m.d[lv(pr.diff)]}${pr.diff==="middels"&&pr.play!=="lyn"?" · Nivået justeres automatisk etter hvordan det går.":""}</span></div>${modes}
+<div class="field"><span class="label">Spillmåte</span><div class="seg3" style="grid-template-columns:1fr 1fr"><button data-act="pplay" data-v="vanlig" aria-pressed="${pr.play!=="lyn"}">Vanlig<small>${ROUND} oppgaver</small></button><button data-act="pplay" data-v="lyn" aria-pressed="${pr.play==="lyn"}">⚡ Lynrunde<small>${LYN_SEK} sekunder${(p.best||{})[k]?` · rekord ${(p.best||{})[k]}`:""}</small></button></div></div>
+<button class="cta" data-act="play" data-mod="${k}">Start</button></div>`}
+function vTheme(){const p=cur();const img=bgGet(p.id);
+  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:22px">Ikon og tema</h2></div>
+<div class="setup"><div class="field"><span class="label">Mitt ikon</span><div class="avs">${AVATARS.map(a=>`<button type="button" data-act="pav" data-a="${a}" aria-pressed="${p.av===a}" aria-label="Ikon ${a}">${a}</button>`).join("")}</div></div>
+<div class="field"><span class="label">Velg farge</span><div class="swatches">${THEMES.map(([v,n,c])=>`<button data-act="ptheme" data-v="${v}" aria-pressed="${(p.theme||"")===v}" aria-label="${n}" title="${n}" style="background:${c}">${v?"":"Std"}</button>`).join("")}</div></div>
+<div class="field"><span class="label">Bakgrunnsbilde</span>${img?`<div class="thumb" style="background-image:url('${img}')"></div>`:'<span class="sub">Velg et bilde fra enheten. Bildet lagres bare på denne enheten.</span>'}
+<div class="row" style="justify-content:flex-start"><label class="cta sm filebtn">${img?"Bytt bilde":"Velg bilde"}<input type="file" id="bgfile" accept="image/*"></label>${img?'<button class="cta sm alt" data-act="bgremove">Fjern bilde</button>':""}</div>
+${S.bgErr?`<p class="err">${S.bgErr}</p>`:""}</div></div>`}
+function vPetNew(){const f=S.petForm;
+  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:22px">Velg kjæledyr</h2></div>
+<form class="setup" id="petform" autocomplete="off"><div class="field"><span class="label">Hvem vil du passe på?</span><div class="petgrid">${Object.entries(PETS).map(([k,v])=>`<button type="button" data-act="ppet" data-v="${k}" aria-pressed="${f.t===k}"><span class="ic">${v.s[0]}</span>${v.n}<small style="font-size:18px">${v.s[1]} ${v.s[2]}</small></button>`).join("")}</div>
+<span class="sub">Kjæledyret vokser og forandrer seg når du svarer riktig.</span></div>
+<div class="field"><label class="label" for="petname">Navn</label><input class="inp" id="petname" maxlength="14" value="${esc(f.name)}"></div>
+<button class="cta" type="submit">Få kjæledyret</button></form>`}
+function vPet(){const p=cur(),pet=p.pet;petTick(p);const lv=petLv(pet),lo=PET_LV[lv-1],hi=PET_LV[lv]??null,b=bal(p),hat=petHat(pet);
+  const size=Math.round(90+lv*9);
+  return`<div class="bar"><button class="back" data-act="home">← Hjem</button><h2 style="font-size:22px">${esc(pet.name)}</h2><span style="margin-left:auto" class="pill"><span class="st">★</span><span id="balnum">${b}</span></span></div>
+<div class="card"><div class="bubble">${S.petSay||petMsg(pet)}</div>
+<div class="petstage"><div class="petbig" id="petbig" data-act="petpat" style="font-size:${size}px">${petEmoji(pet)}${hat?`<span class="hatw">${hat}</span>`:""}</div></div>
+<div class="hearts" aria-label="${pet.hearts} av 5 hjerter">${"❤️".repeat(pet.hearts||0)}${"🤍".repeat(5-(pet.hearts||0))}</div>
+<b>Nivå ${lv}${lv<4?"":lv<8?" · Ungdom":" · Voksen"}</b><div class="xpbar"><i style="width:${hi?Math.round((pet.xp-lo)/(hi-lo)*100):100}%"></i></div>
+<span class="sub">${hi?`${pet.xp-lo} av ${hi-lo} XP til neste nivå`:"Høyeste nivå! Du er en mester!"} · Hver riktig gir 1 XP. Trykk på ${esc(pet.name)} for å kose.</span></div>
+<div class="setup"><div class="field"><span class="label">Gi mat</span><div class="shop">${FOOD.map(([k,ic,n,c,h])=>`<button data-act="feed" data-v="${k}" ${b<c||pet.hearts>=5?"disabled":""}><span class="ic">${ic}</span>${n}<small>★ ${c}</small></button>`).join("")}</div>${pet.hearts>=5?`<span class="sub">${esc(pet.name)} er mett og glad!</span>`:""}</div>
+<div class="field"><span class="label">Hatter</span><div class="shop">${HATS.map(([k,ic,n,c])=>{const own=(pet.hats||[]).includes(k);return`<button data-act="hat" data-v="${k}" aria-pressed="${pet.hat===k}" ${!own&&b<c?"disabled":""}><span class="ic">${ic}</span>${n}<small>${own?(pet.hat===k?"På":"Din"):"★ "+c}</small></button>`}).join("")}</div><span class="sub">Tjen stjerner ved å svare riktig på første forsøk.</span></div></div>`}
+function vEnd(){const g=S.game,e=S.lastEnd,n=e.n;const p=cur();
+  const petl=p.pet?`<p class="petline">${petEmoji(p.pet)} ${esc(p.pet.name)} fikk +${e.xp} XP${e.petUp?` og vokste til nivå ${petLv(p.pet)}! 🎉`:""}</p>`:"";
+  const bon=e.bonus?`<p class="note">+${e.bonus} bonusstjerne${e.bonus>1?"r":""} for 5 riktige på rad 🔥</p>`:"";
+  if(e.lyn)return header()+`<div class="card end"><div class="lyn">⚡ ${n}</div><h1 style="font-size:30px">${e.newBest?"Ny rekord! 🏆":"Tiden er ute!"}</h1>
+<p style="margin:0">Du klarte <b>${n}</b> riktige på ${LYN_SEK} sekunder.${(p.best||{})[g.mod]&&!e.newBest?` Rekorden din er ${(p.best||{})[g.mod]}.`:""}</p>${bon}${petl}
+<div class="row"><button class="cta" data-act="play" data-mod="${g.mod}">Prøv igjen</button><button class="cta alt" data-act="home">Hjem</button></div></div>`;
   const msg=e.change==="up"?`<p class="lvup">Nytt nivå! Nå øver du på nivå ${e.lvl}.</p>`:e.change==="down"?`<p class="lvup">Vi går et nivå ned og øver litt mer på nivå ${e.lvl}.</p>`:e.streakUp===1?`<p class="note">Én runde til med 7 eller 8 riktige, så går du opp et nivå!</p>`:"";
   return header()+`<div class="card end"><h1 style="font-size:34px">${n>=ROUND-1?"Fantastisk!":n>=ROUND/2?"Bra jobba!":"Godt forsøk!"}</h1>
 <div class="stars" aria-label="${n} av ${ROUND} stjerner">${"★".repeat(n)}<span class="off">${"★".repeat(ROUND-n)}</span></div>
-<p style="margin:0">Du fikk <b>${n} av ${ROUND}</b> riktige på første forsøk.</p>${msg}
+<p style="margin:0">Du fikk <b>${n} av ${ROUND}</b> riktige på første forsøk.</p>${msg}${bon}${petl}${e.diff!=="middels"?`<p class="note">Du spilte på ${DIFF[e.diff].name.toLowerCase()}. Nivået endres bare på middels.</p>`:""}
 <div class="row"><button class="cta" data-act="play" data-mod="${g.mod}">Spill igjen</button><button class="cta alt" data-act="home">Hjem</button></div></div>`}
 
 function vAbc(){const sel=LETTERS[S.abcSel];
@@ -494,56 +671,100 @@ function vParent(){
       if(!s||!s.rounds)return`<tr><td>${m.title}<div class="sub">${m.s==="no"?"Norsk":"Matte"}</div></td><td class="n">${s?s.lvl:clamp(p.grade,m.min,m.max)}</td><td class="n">0</td><td class="n">–</td><td><span class="chip new">Ikke prøvd</span></td></tr>`;
       const a=pct(s.first,s.total);const chip=s.rounds>=2&&a<60?'<span class="chip warn">Trenger øving</span>':a>=85?'<span class="chip good">Sterk</span>':'<span class="chip new">På vei</span>';
       return`<tr><td>${m.title}<div class="sub">${m.s==="no"?"Norsk":"Matte"} · ${ago(s.last)}</div></td><td class="n">${s.lvl}</td><td class="n">${s.rounds}</td><td class="n">${a} %</td><td>${chip}</td></tr>`}).join("");
-    const recent=p.hist.slice(0,6).map(h=>`<tr><td>${new Date(h.t).toLocaleDateString("nb-NO",{day:"numeric",month:"short"})}</td><td>${MODS[h.m]?MODS[h.m].title:h.m}</td><td class="n">Nivå ${h.l}</td><td class="n">${h.n}/${ROUND}</td></tr>`).join("");
+    const recent=p.hist.slice(0,6).map(h=>`<tr><td>${new Date(h.t).toLocaleDateString("nb-NO",{day:"numeric",month:"short"})}</td><td>${MODS[h.m]?MODS[h.m].title:h.m}</td><td class="n">Nivå ${h.l}${h.df&&h.df!=="middels"?" · "+DIFF[h.df].name:""}</td><td class="n">${h.ly?"⚡ "+h.n:h.n+"/"+ROUND}</td></tr>`).join("");
     const conf=S.confirmDel===p.id?`<div class="confirm"><span>Slette <b>${esc(p.name)}</b> og all fremgang? Dette kan ikke angres.</span><div class="prow"><button class="cta sm danger" data-act="del" data-id="${p.id}">Slett</button><button class="cta sm alt" data-act="nodel">Avbryt</button></div></div>`:"";
-    return`<section class="pcard"><div class="phead"><span class="av">${p.av}</span><div><h2>${esc(p.name)}</h2><div class="meta">${p.grade}. trinn · ★ ${p.stars} stjerner</div></div></div>
-<div class="kpis"><div class="kpi"><b>${week}</b><span>runder siste 7 dager</span></div><div class="kpi"><b>${all.r}</b><span>runder totalt</span></div><div class="kpi"><b>${all.t?pct(all.f,all.t)+" %":"–"}</b><span>riktig på første forsøk</span></div></div>
+    return`<section class="pcard"><div class="phead"><span class="av">${p.av}</span><div><h2>${esc(p.name)}</h2><div class="meta">${p.grade}. trinn${p.age?` · ${p.age} år`:""}${GNAME[p.gender]?` · ${GNAME[p.gender]}`:""} · ★ ${p.stars} stjerner</div></div></div>
+<div class="kpis"><div class="kpi"><b>${week}</b><span>runder siste 7 dager</span></div><div class="kpi"><b>${Math.round(days.reduce((a,d)=>a+((p.dmin||{})[key(d)]||0),0))}</b><span>minutter siste 7 dager</span></div><div class="kpi"><b>${all.r}</b><span>runder totalt</span></div><div class="kpi"><b>${all.t?pct(all.f,all.t)+" %":"–"}</b><span>riktig på første forsøk</span></div></div>
 <div><span class="label">Siste 7 dager</span><div class="week">${vals.map((v,k)=>`<div><b style="color:var(--ink);font-size:12px">${v||""}</b><i class="${v?"":"zero"}" style="height:${v?Math.max(8,v/mx*60):3}px"></i>${wd[days[k].getDay()]}</div>`).join("")}</div></div>
 <div><span class="label">Fag og nivå</span><div class="tbl"><table><thead><tr><th>Øvelse</th><th class="n">Nivå</th><th class="n">Runder</th><th class="n">Riktig</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div></div>
 ${recent?`<div><span class="label">Siste runder</span><div class="tbl"><table><tbody>${recent}</tbody></table></div></div>`:""}
+<div class="field"><span class="label">Kjønn</span><div class="seg3">${GENDERS.map(([v,n])=>`<button data-act="setgender" data-id="${p.id}" data-v="${v}" aria-pressed="${(p.gender||"")===v}">${n}</button>`).join("")}</div></div>
+<div class="field"><span class="label">Alder</span><div class="ages">${AGES.map(n=>`<button data-act="setage" data-id="${p.id}" data-v="${n}" aria-pressed="${p.age===n}">${n}</button>`).join("")}</div></div>
 <div class="field"><span class="label">Endre trinn</span><div class="grades">${[1,2,3,4,5,6,7].map(n=>`<button data-act="setgrade" data-id="${p.id}" data-g="${n}" aria-pressed="${p.grade===n}">${n}</button>`).join("")}</div><span class="sub">Nytt trinn setter nivået på alle øvelser til det trinnet. Statistikken beholdes.</span></div>
 ${conf||`<div class="prow"><button class="cta sm alt" data-act="askdel" data-id="${p.id}">Slett spiller</button></div>`}</section>`}).join("");
+  const rk=DB.profiles.map(p=>({p,r:days.reduce((a,d)=>a+(p.days[key(d)]||0),0),m:Math.round(days.reduce((a,d)=>a+((p.dmin||{})[key(d)]||0),0))})).sort((a,b)=>b.m-a.m||b.r-a.r);
+  const rank=DB.profiles.length>1?`<section class="pcard"><h2 style="font-size:22px">Hvem øver mest denne uka?</h2><div class="rank">${rk.map((x,i)=>`<div><span class="av">${x.p.av}</span><b>${i===0&&x.r?"🏆 ":""}${esc(x.p.name)}</b><span class="r">${x.m} min<br>${x.r} runder</span></div>`).join("")}</div></section>`:"";
   return`<div class="bar"><button class="back" data-act="pickview">← Spillere</button><h2 style="font-size:22px">Foreldreoversikt</h2></div>
-${cards||'<p>Ingen spillere ennå.</p>'}
+${rank}${cards||'<p>Ingen spillere ennå.</p>'}
 <div class="info"><b style="color:var(--ink)">Slik fungerer Lærelek</b><ul>
 <li>Oppgavene følger kompetansemålene i norsk og matematikk for 1.–7. trinn (LK20).</li>
 <li>Hver øvelse har sitt eget nivå. Barnet går opp etter to runder på rad med 7–8 av 8 riktige, og ned etter to runder på rad med 3 eller færre.</li>
+<li>Kjæledyret får 1 XP for hvert riktige svar og vokser i tre stadier. Stjerner kan brukes på mat og hatter. Stjernene kan ikke kjøpes for penger.</li>
+<li>Lynrunde: så mange riktige som mulig på ${LYN_SEK} sekunder. Lynrunder endrer ikke nivået.</li>
+<li>Barnet kan velge lett, middels eller vanskelig før hver runde. Nivået justeres automatisk bare på middels. Bruker barnet tips, gir den oppgaven ingen stjerne.</li>
 <li>«Trenger øving» vises når barnet har under 60 % riktig på første forsøk etter minst to runder.</li>
-<li>All fremgang lagres bare på denne enheten. Ingenting sendes til internett, og det trengs ingen konto.</li>
+<li>Kjønn (gutt, jente eller annet) og alder er valgfritt. Velger barnet gutt eller jente, får det blå eller rosa farge som start, men alle farger kan velges under Mitt tema.</li>
+<li>All fremgang, kjønn, alder, valgt farge og eventuelt bakgrunnsbilde lagres bare på denne enheten. Ingenting sendes til internett, og det trengs ingen konto.</li>
 <li>Opplesning bruker enhetens norske stemme. Finnes den ikke, brukes svensk eller dansk stemme, ellers slås opplesningen av. Appen leser aldri opp med engelsk stemme.</li></ul></div>${voiceNote()}`}
 
 function render(){const app=document.getElementById("app");if(!cur()&&["home","game","end","abc"].includes(S.view))S.view="pick";
-  app.innerHTML={pick:vPick,new:vNew,home:vHome,game:vGame,end:vEnd,abc:vAbc,gate:vGate,parent:vParent}[S.view]()}
+  app.innerHTML={pick:vPick,new:vNew,home:vHome,game:vGame,end:vEnd,abc:vAbc,gate:vGate,parent:vParent,setup:vSetup,theme:vTheme,pet:vPet,petnew:vPetNew}[S.view]();applyTheme();if(S.view!=="game")stopTimer()}
+const bgMem={};
+function bgGet(id){if(id in bgMem)return bgMem[id];try{return bgMem[id]=localStorage.getItem("laerelek_bg_"+id)||""}catch(e){return""}}
+function applyTheme(){const p=["pick","new","gate","parent"].includes(S.view)?null:cur();document.body.className=p&&p.theme?"th-"+p.theme:"";
+  let el=document.getElementById("bgimg");const img=p?bgGet(p.id):"";
+  if(img){if(!el){el=document.createElement("div");el.id="bgimg";document.body.prepend(el)}el.style.backgroundImage=`url('${img}')`}else if(el)el.remove()}
+function loadBg(file){const p=cur();if(!p||!file)return;S.bgErr="";const rd=new FileReader();
+  rd.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,1200/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      const url=c.toDataURL("image/jpeg",.75);bgMem[p.id]=url;try{localStorage.setItem("laerelek_bg_"+p.id,url)}catch(e){S.bgErr="Bildet ble for stort til å lagres. Det vises bare til appen lukkes."}render()};
+    im.onerror=()=>{S.bgErr="Kunne ikke lese bildet. Prøv et annet.";render()};im.src=rd.result};rd.readAsDataURL(file)}
 
 // ================= hendelser =================
 const app=document.getElementById("app");
 app.addEventListener("input",e=>{if(e.target.id==="pname"&&S.form)S.form.name=e.target.value});
+app.addEventListener("input",e=>{if(e.target.id==="petname"&&S.petForm)S.petForm.name=e.target.value});
+app.addEventListener("change",e=>{if(e.target.id==="bgfile"&&e.target.files&&e.target.files[0])loadBg(e.target.files[0])});
 app.addEventListener("submit",e=>{e.preventDefault();
   if(e.target.id==="newform"){const f=S.form;f.name=(document.getElementById("pname").value||"").trim();
     if(!f.name){f.err="Skriv inn et navn.";render();return}if(!f.grade){f.err="Velg trinn.";render();return}
-    const p={id:"p"+Date.now().toString(36),name:f.name,av:f.av,grade:f.grade,stars:0,mods:{},hist:[],days:{}};DB.profiles.push(p);DB.cur=p.id;persist();S.form=null;S.tab="no";S.view="home";render();say(`Hei, ${p.name}!`)}
+    const p={id:"p"+Date.now().toString(36),name:f.name,av:f.av,grade:f.grade,gender:f.gender||"",age:f.age||null,theme:GTHEME[f.gender]||"",stars:0,mods:{},hist:[],days:{}};DB.profiles.push(p);DB.cur=p.id;persist();S.form=null;S.tab=null;S.view="home";render();say(`Hei, ${p.name}!`)}
+  if(e.target.id==="petform"){const f=S.petForm,p=cur();const nm=(document.getElementById("petname").value||"").trim()||PETS[f.t].def;
+    p.pet={t:f.t,name:nm,xp:0,hearts:4,seen:today(),hat:"",hats:[]};persist();S.petSay=`Hei! Jeg heter ${esc(nm)}. Svar riktig, så vokser jeg!`;S.view="pet";render();say(`Hei! Jeg heter ${nm}.`);confetti(80)}
   if(e.target.id==="gateform"){const v=+document.getElementById("gate").value;if(v===S.gate.a*S.gate.b){S.view="parent";S.confirmDel=null;render();window.scrollTo(0,0)}else{S.gate={a:rand(12,19),b:rand(3,9),err:true};render();const i=document.getElementById("gate");if(i)i.focus()}}
 });
 app.addEventListener("click",e=>{
   const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act;
   if(a==="sound"){DB.sound=!DB.sound;persist();if(!DB.sound)try{speechSynthesis.cancel()}catch(e){}render()}
-  else if(a==="choose"){DB.cur=b.dataset.id;persist();S.view="home";S.tab="no";render();const p=cur();say(`Hei, ${p.name}!`)}
-  else if(a==="new"){S.form={name:"",av:pick(AVATARS),grade:null,err:""};S.view="new";render();const i=document.getElementById("pname");if(i)i.focus()}
+  else if(a==="choose"){DB.cur=b.dataset.id;persist();S.view="home";S.tab=null;render();const p=cur();say(`Hei, ${p.name}!`)}
+  else if(a==="new"){S.form={name:"",av:pick(AVATARS),grade:null,gender:null,age:null,err:""};S.view="new";render();const i=document.getElementById("pname");if(i)i.focus()}
   else if(a==="fav"){S.form.av=b.dataset.a;render()}
+  else if(a==="fgender"){S.form.gender=b.dataset.v;render()}
+  else if(a==="fage"){S.form.age=+b.dataset.v;render()}
+  else if(a==="setgender"){const p=DB.profiles.find(x=>x.id===b.dataset.id);if(p){const old=GTHEME[p.gender]||"";p.gender=b.dataset.v;if((p.theme||"")===old)p.theme=GTHEME[p.gender]||"";persist();render()}}
+  else if(a==="setage"){const p=DB.profiles.find(x=>x.id===b.dataset.id);if(p){p.age=p.age===+b.dataset.v?null:+b.dataset.v;persist();render()}}
   else if(a==="fgrade"){S.form.grade=+b.dataset.g;S.form.err="";render()}
   else if(a==="pickview"){try{speechSynthesis.cancel()}catch(e){}S.view="pick";render()}
   else if(a==="parents"){S.gate={a:rand(12,19),b:rand(3,9),err:false};S.view="gate";render();const i=document.getElementById("gate");if(i)i.focus()}
   else if(a==="setgrade"){const p=DB.profiles.find(x=>x.id===b.dataset.id);if(p){p.grade=+b.dataset.g;Object.keys(p.mods).forEach(k=>{const m=MODS[k];Object.assign(p.mods[k],{lvl:clamp(p.grade,m.min,m.max),up:0,down:0})});persist();render()}}
   else if(a==="askdel"){S.confirmDel=b.dataset.id;render()}
   else if(a==="nodel"){S.confirmDel=null;render()}
-  else if(a==="del"){DB.profiles=DB.profiles.filter(x=>x.id!==b.dataset.id);if(DB.cur===b.dataset.id)DB.cur=null;persist();S.confirmDel=null;render()}
-  else if(a==="tab"){S.tab=b.dataset.t;render()}
+  else if(a==="del"){try{localStorage.removeItem("laerelek_bg_"+b.dataset.id)}catch(e){}delete bgMem[b.dataset.id];DB.profiles=DB.profiles.filter(x=>x.id!==b.dataset.id);if(DB.cur===b.dataset.id)DB.cur=null;persist();S.confirmDel=null;render()}
+  else if(a==="tab"){S.tab=b.dataset.t;render();window.scrollTo(0,0)}
+  else if(a==="subjects"){S.tab=null;render();window.scrollTo(0,0)}
   else if(a==="play"){startGame(b.dataset.mod);window.scrollTo(0,0)}
-  else if(a==="home"){try{speechSynthesis.cancel()}catch(e){}S.view="home";S.game=null;render()}
+  else if(a==="setup"){S.setupMod=b.dataset.mod;S.view="setup";render();window.scrollTo(0,0)}
+  else if(a==="pdiff"){prefs(cur(),S.setupMod).diff=b.dataset.v;persist();render()}
+  else if(a==="pmode"){prefs(cur(),S.setupMod).mode=b.dataset.v;persist();render()}
+  else if(a==="hint"){useHint()}
+  else if(a==="pplay"){prefs(cur(),S.setupMod).play=b.dataset.v;persist();render()}
+  else if(a==="petnew"){S.petForm={t:"drage",name:PETS.drage.def};S.view="petnew";render();window.scrollTo(0,0)}
+  else if(a==="ppet"){const old=S.petForm;const wasDef=!old.name||old.name===PETS[old.t].def;old.t=b.dataset.v;if(wasDef)old.name=PETS[old.t].def;render()}
+  else if(a==="pet"){S.petSay="";S.view="pet";render();window.scrollTo(0,0)}
+  else if(a==="petpat"){const p=cur();S.petSay=pick(["Det kiler! 😄","Mmm, så godt!","Jeg er glad i deg!","Hihi!","Mer kos!"]);render();const el=document.getElementById("petbig");if(el)el.classList.add("bounce");tone([880,1175]);say(S.petSay.replace(/[^\p{L}\p{N}\s!.,]/gu,""))}
+  else if(a==="feed"){const p=cur(),f=FOOD.find(x=>x[0]===b.dataset.v);if(f&&bal(p)>=f[3]&&p.pet.hearts<5){p.spent=(p.spent||0)+f[3];p.pet.hearts=Math.min(5,p.pet.hearts+f[4]);persist();S.petSay=`Nam nam! Takk for ${f[2].toLowerCase()}! ${f[1]}`;render();const el=document.getElementById("petbig");if(el)el.classList.add("bounce");tone([523,659,784]);say(`Nam nam! Takk!`)}}
+  else if(a==="hat"){const p=cur(),h=HATS.find(x=>x[0]===b.dataset.v),pet=p.pet;pet.hats=pet.hats||[];if(!h)return;
+    if(pet.hats.includes(h[0])){pet.hat=pet.hat===h[0]?"":h[0];S.petSay=pet.hat?"Så fin jeg ble!":"Nå er jeg uten hatt."}
+    else if(bal(p)>=h[3]){p.spent=(p.spent||0)+h[3];pet.hats.push(h[0]);pet.hat=h[0];S.petSay=`Wow, en ${h[2].toLowerCase()}! Tusen takk!`;confetti(50);tone([523,659,784,1047])}
+    persist();render();say(S.petSay)}
+  else if(a==="theme"){S.bgErr="";S.view="theme";render();window.scrollTo(0,0)}
+  else if(a==="pav"){cur().av=b.dataset.a;persist();render()}
+  else if(a==="ptheme"){cur().theme=b.dataset.v;persist();render()}
+  else if(a==="bgremove"){const p=cur();delete bgMem[p.id];try{localStorage.removeItem("laerelek_bg_"+p.id)}catch(e){}render()}
+  else if(a==="home"){try{speechSynthesis.cancel()}catch(e){}stopTimer();S.view="home";S.game=null;render()}
   else if(a==="abc"){S.view="abc";S.abcSel=0;render();window.scrollTo(0,0)}
   else if(a==="letter"){S.abcSel=+b.dataset.i;render();const l=LETTERS[S.abcSel];say(`${l[0]}. ${l[0]} som i ${l[1]}.`)}
   else if(a==="speak"){if(S.view==="abc"){const l=LETTERS[S.abcSel];say(`${l[0]}. ${l[0]} som i ${l[1]}.`)}else if(S.game)say(S.game.q.speak)}
-  else if(a==="answer"){const g=S.game;if(!g||g.locked||b.classList.contains("wrong"))return;
+  else if(a==="answer"){const g=S.game;if(!g||g.locked||b.classList.contains("wrong")||b.classList.contains("removed"))return;
     if(b.dataset.v===String(g.q.ans)){b.classList.add("right");correct()}else{b.classList.add("wrong");wrong(b)}}
   else if(a==="tile"){const g=S.game;if(!g||g.locked)return;const q=g.q,t=q.tiles[+b.dataset.i];
     if(t.ch===q.word[q.filled]){t.used=true;q.filled++;tone([700]);render();if(q.filled===q.word.length)correct()}
